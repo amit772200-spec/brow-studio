@@ -324,10 +324,17 @@
               <span id="conf-price" class="font-bold text-primary text-lg"></span>
             </div>
           </div>
-          <a href="index.html" class="btn-gold inline-flex items-center gap-2 px-8 py-4 rounded-full text-base shadow-lg">
-            <span class="material-symbols-outlined">home</span>
-            חזרה לדף הבית
-          </a>
+          <div class="flex flex-col gap-3 items-center max-w-xs mx-auto">
+            <a href="index.html" class="btn-gold inline-flex items-center gap-2 px-8 py-4 rounded-full text-base shadow-lg w-full justify-center">
+              <span class="material-symbols-outlined">home</span>
+              חזרה לדף הבית
+            </a>
+            <button onclick="cancelViaWhatsapp()" class="inline-flex items-center gap-2 px-8 py-4 rounded-full text-base w-full justify-center border border-red-200 text-red-500 hover:bg-red-50 transition-colors font-medium">
+              <span class="material-symbols-outlined text-base">cancel</span>
+              ביטול תור
+            </button>
+            <p class="text-[10px] text-outline/50 text-center">ביטול עד 24 שעות לפני התור — ישלח הודעת WhatsApp לסטודיו</p>
+          </div>
         </div>
 
       </div><!-- end left -->
@@ -635,6 +642,17 @@
       setStep(4);
       document.getElementById('progressBar').style.opacity = '0';
     });
+
+    const STUDIO_PHONE = '0501234567'; // ← שני למספר הטלפון של הסטודיו
+
+    function cancelViaWhatsapp() {
+      const service = document.getElementById('conf-service').textContent;
+      const date    = document.getElementById('conf-date').textContent;
+      const time    = document.getElementById('conf-time').textContent;
+      const msg = `שלום, אני רוצה לבטל את התור שלי 🙏\n\nשירות: ${service}\nתאריך: ${date}\nשעה: ${time}\n\nתודה!`;
+      const phone = STUDIO_PHONE.replace(/[^0-9]/g,'').replace(/^0/,'972');
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
 
     renderCalendar(); updateSummary();
   </script>
