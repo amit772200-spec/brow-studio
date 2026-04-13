@@ -373,7 +373,7 @@ function renderCalendar() {
     const d = document.createElement('div');
     const date = new Date(calYear, calMonth, day); date.setHours(0,0,0,0);
     const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-    d.className = 'cal-day text-white/70';
+    d.className = 'cal-day';
     d.textContent = day;
     if (date.getTime() === today.getTime()) d.classList.add('today');
     if (selectedDate === dateStr) d.classList.add('selected');
