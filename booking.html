@@ -78,16 +78,16 @@
   <!-- NAV -->
   <header class="fixed top-0 w-full z-50 glass-nav shadow-[0_2px_20px_rgba(26,28,26,0.04)]">
     <nav class="flex justify-between items-center px-6 md:px-10 py-4 max-w-7xl mx-auto">
+      <button id="navBack" onclick="navGoBack()" class="flex items-center gap-1.5 text-outline/60 hover:text-primary transition-colors text-sm font-medium">
+        <span class="material-symbols-outlined text-base">arrow_forward</span>
+        חזרה
+      </button>
       <a href="index.html" class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center">
           <span class="text-white text-sm">✦</span>
         </div>
         <span class="brand-name text-lg tracking-widest">BROW BEAUTY</span>
       </a>
-      <button id="navBack" onclick="navGoBack()" class="flex items-center gap-1.5 text-outline/60 hover:text-primary transition-colors text-sm font-medium">
-        <span class="material-symbols-outlined text-base">arrow_forward</span>
-        חזרה
-      </button>
     </nav>
   </header>
 
@@ -333,7 +333,7 @@
       </div><!-- end left -->
 
       <!-- RIGHT: SUMMARY -->
-      <div class="lg:col-span-5 sticky top-28">
+      <div class="lg:col-span-5 sticky top-28" id="summarySidebar">
         <div class="bg-surface-container-low p-8 rounded-xl space-y-6">
           <span class="text-[10px] font-bold tracking-[0.2em] text-primary uppercase">סיכום הזמנה</span>
           <div class="border-b border-outline-variant/20 pb-5">
@@ -372,15 +372,22 @@
     </div>
   </main>
 
-  <footer class="py-8 px-6 bg-surface-container-low border-t border-outline-variant/20 text-sm text-outline">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row-reverse justify-between items-center gap-4">
-      <span class="font-headline font-bold text-on-surface">BROW BEAUTY</span>
-      <div class="flex gap-6">
-        <a href="#" class="hover:text-primary transition-colors">מדיניות פרטיות</a>
-        <a href="#" class="hover:text-primary transition-colors">ביטולים</a>
-        <a href="#" class="hover:text-primary transition-colors">צרי קשר</a>
+  <footer class="bg-surface-container-low py-10 px-5 border-t border-outline-variant/20">
+    <div class="max-w-5xl mx-auto">
+      <div class="flex flex-col md:flex-row-reverse justify-between items-center gap-5 mb-6">
+        <span class="brand-name text-xl tracking-widest">BROW BEAUTY</span>
+        <div class="flex gap-6 flex-wrap justify-center">
+          <a href="#" class="text-on-surface/70 hover:text-primary transition-colors text-sm font-medium">מדיניות פרטיות</a>
+          <a href="#" class="text-on-surface/70 hover:text-primary transition-colors text-sm font-medium">תנאי שימוש</a>
+          <a href="#" class="text-on-surface/70 hover:text-primary transition-colors text-sm font-medium">צרי קשר</a>
+        </div>
+        <p class="text-outline text-xs">© 2024 BROW BEAUTY</p>
       </div>
-      <p>© 2024 BROW BEAUTY. כל הזכויות שמורות.</p>
+      <div class="text-center mt-4">
+        <a href="admin.html" class="text-on-surface/60 hover:text-primary transition-colors text-xs tracking-[0.25em] font-bold uppercase border border-outline-variant/30 rounded-full px-4 py-1.5">
+          ADMIN
+        </a>
+      </div>
     </div>
   </footer>
 
@@ -551,6 +558,9 @@
       state.step = n;
       [1,2,3,4].forEach(i => document.getElementById(`step${i}`).classList.add('hidden'));
       document.getElementById(`step${n}`).classList.remove('hidden');
+      // Hide sidebar on success screen
+      const sidebar = document.getElementById('summarySidebar');
+      if (sidebar) sidebar.style.display = n === 4 ? 'none' : '';
       [1,2,3].forEach(i => {
         const ind = document.getElementById(`step${i}-indicator`);
         if (!ind) return;
