@@ -9,49 +9,65 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Heebo', sans-serif; background: #0f0f13; color: #f0efe9; min-height: 100vh; }
+    body { font-family: 'Heebo', sans-serif; background: #faf9f6; color: #1a1c1a; min-height: 100vh; }
 
     .brand-name { font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: .08em; background: linear-gradient(135deg,#775a19,#e0b96f,#a0825a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .glass { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(16px); }
-    .glass-hover:hover { background:rgba(255,255,255,0.07); border-color:rgba(224,185,111,0.25); }
+    .card { background:#fff; border:1px solid rgba(119,90,25,0.1); border-radius:1.25rem; box-shadow:0 2px 12px rgba(26,28,26,0.06); }
 
     /* Login screen */
-    #loginScreen { position:fixed; inset:0; z-index:100; background:#0f0f13; display:flex; align-items:center; justify-content:center; }
-    .login-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:1.5rem; padding:2.5rem; width:100%; max-width:360px; }
-    .pin-input { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:.75rem; color:white; font-size:1rem; text-align:right; outline:none; width:100%; padding:.75rem 1rem; transition:border-color .2s; }
-    .pin-input:focus { border-color:rgba(224,185,111,0.5); }
+    #loginScreen { position:fixed; inset:0; z-index:100; background:#faf9f6; display:flex; align-items:center; justify-content:center; }
+    .login-card { background:#fff; border:1px solid rgba(119,90,25,0.15); border-radius:1.5rem; padding:2.5rem; width:100%; max-width:360px; box-shadow:0 8px 32px rgba(119,90,25,0.1); }
+    .pin-input { background:#faf9f6; border:1px solid rgba(119,90,25,0.2); border-radius:.75rem; color:#1a1c1a; font-size:1rem; text-align:right; outline:none; width:100%; padding:.75rem 1rem; transition:border-color .2s; }
+    .pin-input:focus { border-color:#775a19; }
+    .pin-input::placeholder { color:#9b9b8f; }
     #passwordInput { letter-spacing:.2rem; font-size:1.25rem; }
     .btn-gold { background:linear-gradient(135deg,#775a19,#e0b96f); color:white; font-weight:700; border:none; cursor:pointer; transition:all .3s; }
     .btn-gold:hover { transform:translateY(-1px); box-shadow:0 8px 20px rgba(119,90,25,.35); }
 
+    /* Nav */
+    .admin-nav { background:rgba(250,249,246,0.95); border-bottom:1px solid rgba(119,90,25,0.12); backdrop-filter:blur(24px); }
+
+    /* Stats */
+    .stat-card { background:#fff; border:1px solid rgba(119,90,25,0.08); border-radius:1.25rem; box-shadow:0 1px 8px rgba(26,28,26,0.05); }
+
     /* Calendar */
-    .cal-day { aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:.5rem; font-size:13px; font-weight:500; cursor:pointer; transition:all .2s; position:relative; }
-    .cal-day:hover:not(.empty) { background:rgba(255,255,255,0.06); }
-    .cal-day.today { border:1.5px solid #e0b96f; color:#e0b96f; }
+    .cal-day { aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:.5rem; font-size:13px; font-weight:500; cursor:pointer; transition:all .2s; position:relative; color:#1a1c1a; }
+    .cal-day:hover:not(.empty) { background:rgba(119,90,25,0.07); }
+    .cal-day.today { border:1.5px solid #775a19; color:#775a19; font-weight:700; }
     .cal-day.selected { background:#775a19; color:white; }
     .cal-day.empty { cursor:default; }
-    .cal-day.has-appt::after { content:''; position:absolute; bottom:3px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:#e0b96f; }
+    .cal-day.has-appt::after { content:''; position:absolute; bottom:3px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:#775a19; }
 
     /* Appointment row */
     .appt-row { transition:all .2s; cursor:pointer; border-radius:.75rem; }
-    .appt-row:hover { background:rgba(255,255,255,0.05); }
+    .appt-row:hover { background:rgba(119,90,25,0.04); }
 
     /* Modal */
-    .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:50; display:flex; align-items:center; justify-content:center; padding:1rem; }
-    .modal-card { background:#1a1a22; border:1px solid rgba(255,255,255,0.12); border-radius:1.5rem; width:100%; max-width:440px; overflow:hidden; }
+    .modal-bg { position:fixed; inset:0; background:rgba(26,28,26,0.5); z-index:50; display:flex; align-items:flex-end; justify-content:center; padding:0; overflow-y:auto; }
+    @media (min-width:640px) { .modal-bg { align-items:center; padding:1rem; } }
+    .modal-card { background:#fff; border:1px solid rgba(119,90,25,0.12); border-radius:1.5rem 1.5rem 0 0; width:100%; max-width:440px; overflow-y:auto; max-height:92vh; box-shadow:0 -8px 40px rgba(26,28,26,0.15); }
+    @media (min-width:640px) { .modal-card { border-radius:1.5rem; max-height:88vh; } }
+
+    /* Info cells */
+    .info-cell { background:#faf9f6; border:1px solid rgba(119,90,25,0.08); border-radius:.875rem; padding:.875rem; }
+    .info-cell .label { font-size:.7rem; color:#9b9b8f; font-weight:600; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.25rem; }
+    .info-cell .value { font-weight:600; color:#1a1c1a; font-size:.95rem; }
 
     /* Badge */
-    .badge-active { background:rgba(74,222,128,.15); color:#4ade80; border:1px solid rgba(74,222,128,.25); }
-    .badge-cancelled { background:rgba(248,113,113,.15); color:#f87171; border:1px solid rgba(248,113,113,.25); }
-    .badge-pending { background:rgba(251,191,36,.15); color:#fbbf24; border:1px solid rgba(251,191,36,.25); }
+    .badge-active { background:rgba(21,128,61,.1); color:#15803d; border:1px solid rgba(21,128,61,.2); }
+    .badge-cancelled { background:rgba(185,28,28,.1); color:#b91c1c; border:1px solid rgba(185,28,28,.2); }
+    .badge-pending { background:rgba(161,98,7,.1); color:#a16207; border:1px solid rgba(161,98,7,.2); }
+
+    /* Dividers in list */
+    .list-divider { border-color:rgba(119,90,25,0.08); }
 
     .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
     .filled { font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24; }
 
-    @keyframes fadeIn { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:scale(1)} }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
     .fade-in { animation:fadeIn .25s ease; }
 
-    ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+    ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:rgba(119,90,25,0.2);border-radius:2px}
   </style>
 </head>
 <body>
@@ -61,20 +77,20 @@
   <div class="login-card">
     <div class="text-center mb-8">
       <span class="brand-name text-2xl tracking-widest block mb-2">BROW BEAUTY</span>
-      <p class="text-white/40 text-sm">כניסת מנהל</p>
+      <p class="text-outline/50 text-sm">כניסת מנהל</p>
     </div>
     <div class="mb-4">
-      <label class="block text-xs font-bold text-white/40 tracking-wider uppercase mb-2">שם משתמש</label>
+      <label class="block text-xs font-bold text-outline/50 tracking-wider uppercase mb-2">שם משתמש</label>
       <input type="text" id="usernameInput" class="pin-input" placeholder="admin" autocomplete="username" />
     </div>
     <div class="mb-6">
-      <label class="block text-xs font-bold text-white/40 tracking-wider uppercase mb-2">סיסמה</label>
+      <label class="block text-xs font-bold text-outline/50 tracking-wider uppercase mb-2">סיסמה</label>
       <input type="password" id="passwordInput" class="pin-input" placeholder="••••••" autocomplete="current-password" />
-      <p id="pinError" class="text-red-400 text-xs text-center mt-2 hidden">שם משתמש או סיסמה שגויים. נסי שוב.</p>
+      <p id="pinError" class="text-red-500 text-xs text-center mt-2 hidden">שם משתמש או סיסמה שגויים. נסי שוב.</p>
     </div>
     <button onclick="doLogin()" class="btn-gold w-full py-3 rounded-xl text-base">כניסה</button>
     <div class="text-center mt-5">
-      <a href="index.html" class="text-white/30 hover:text-white/60 transition-colors text-sm tracking-wide">← חזרה לדף הבית</a>
+      <a href="index.html" class="text-outline/40 hover:text-primary transition-colors text-sm tracking-wide">← חזרה לדף הבית</a>
     </div>
   </div>
 </div>
@@ -83,14 +99,14 @@
 <div id="adminApp" class="hidden min-h-screen">
 
   <!-- NAV -->
-  <header class="border-b sticky top-0 z-40" style="background:#0f0f13;border-color:rgba(255,255,255,0.07)">
+  <header class="admin-nav sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-6 py-4 flex flex-row-reverse justify-between items-center">
       <span class="brand-name text-xl tracking-widest">BROW BEAUTY</span>
       <div class="flex items-center gap-3">
-        <span class="text-xs text-white/40">ממשק ניהול</span>
-        <div class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
+        <span class="text-xs text-outline/60 font-medium">ממשק ניהול</span>
+        <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
       </div>
-      <button onclick="logout()" class="text-white/40 hover:text-white/70 transition-colors text-sm flex items-center gap-1">
+      <button onclick="logout()" class="text-outline/50 hover:text-primary transition-colors text-sm flex items-center gap-1">
         <span class="material-symbols-outlined text-base">logout</span> יציאה
       </button>
     </div>
@@ -100,21 +116,21 @@
 
     <!-- STATS ROW -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-      <div class="glass rounded-2xl p-5 text-center">
-        <p class="text-3xl font-bold text-[#e0b96f] mb-1" id="statTotal">0</p>
-        <p class="text-xs text-white/40">סה״כ תורים</p>
+      <div class="stat-card p-5 text-center">
+        <p class="text-3xl font-bold text-primary mb-1" id="statTotal">0</p>
+        <p class="text-xs text-outline/60 font-medium">סה״כ תורים</p>
       </div>
-      <div class="glass rounded-2xl p-5 text-center">
-        <p class="text-3xl font-bold text-green-400 mb-1" id="statToday">0</p>
-        <p class="text-xs text-white/40">היום</p>
+      <div class="stat-card p-5 text-center">
+        <p class="text-3xl font-bold text-green-600 mb-1" id="statToday">0</p>
+        <p class="text-xs text-outline/60 font-medium">היום</p>
       </div>
-      <div class="glass rounded-2xl p-5 text-center">
-        <p class="text-3xl font-bold text-blue-400 mb-1" id="statWeek">0</p>
-        <p class="text-xs text-white/40">השבוע</p>
+      <div class="stat-card p-5 text-center">
+        <p class="text-3xl font-bold text-blue-600 mb-1" id="statWeek">0</p>
+        <p class="text-xs text-outline/60 font-medium">השבוע</p>
       </div>
-      <div class="glass rounded-2xl p-5 text-center">
-        <p class="text-3xl font-bold text-red-400 mb-1" id="statCancelled">0</p>
-        <p class="text-xs text-white/40">בוטלו</p>
+      <div class="stat-card p-5 text-center">
+        <p class="text-3xl font-bold text-red-500 mb-1" id="statCancelled">0</p>
+        <p class="text-xs text-outline/60 font-medium">בוטלו</p>
       </div>
     </div>
 
@@ -122,62 +138,62 @@
 
       <!-- CALENDAR -->
       <div class="lg:col-span-1">
-        <div class="glass rounded-2xl p-5">
+        <div class="card p-5">
           <div class="flex items-center justify-between mb-5">
-            <button id="calPrev" class="w-8 h-8 rounded-full hover:bg-white/08 flex items-center justify-center transition-colors" style="hover:background:rgba(255,255,255,0.08)">
-              <span class="material-symbols-outlined text-white/60 text-lg">chevron_right</span>
+            <button id="calPrev" class="w-8 h-8 rounded-full hover:bg-primary/08 flex items-center justify-center transition-colors">
+              <span class="material-symbols-outlined text-outline/60 text-lg">chevron_right</span>
             </button>
-            <span id="calTitle" class="font-bold text-white text-sm"></span>
+            <span id="calTitle" class="font-bold text-on-surface text-sm"></span>
             <button id="calNext" class="w-8 h-8 rounded-full flex items-center justify-center transition-colors">
-              <span class="material-symbols-outlined text-white/60 text-lg">chevron_left</span>
+              <span class="material-symbols-outlined text-outline/60 text-lg">chevron_left</span>
             </button>
           </div>
           <!-- Day headers -->
           <div class="grid grid-cols-7 mb-2">
-            <div class="text-[10px] text-white/30 text-center py-1 font-bold">א</div>
-            <div class="text-[10px] text-white/30 text-center py-1 font-bold">ב</div>
-            <div class="text-[10px] text-white/30 text-center py-1 font-bold">ג</div>
-            <div class="text-[10px] text-white/30 text-center py-1 font-bold">ד</div>
-            <div class="text-[10px] text-white/30 text-center py-1 font-bold">ה</div>
-            <div class="text-[10px] text-white/30 text-center py-1 font-bold">ו</div>
-            <div class="text-[10px] text-white/30 text-center py-1 font-bold">ש</div>
+            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">א</div>
+            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ב</div>
+            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ג</div>
+            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ד</div>
+            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ה</div>
+            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ו</div>
+            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ש</div>
           </div>
           <div class="grid grid-cols-7 gap-1" id="adminCalGrid"></div>
         </div>
 
         <!-- Jump to date -->
-        <div class="glass rounded-2xl p-4 mt-4">
-          <p class="text-xs text-white/40 uppercase tracking-wider mb-3 font-bold">קפיצה לתאריך</p>
-          <input type="date" id="jumpDate" class="w-full bg-white/06 border border-white/10 rounded-lg px-3 py-2 text-white text-sm outline-none focus:border-yellow-600/50" style="background:rgba(255,255,255,0.06)" />
+        <div class="card p-4 mt-4">
+          <p class="text-xs text-outline/50 uppercase tracking-wider mb-3 font-bold">קפיצה לתאריך</p>
+          <input type="date" id="jumpDate" class="w-full bg-surface rounded-lg border border-primary/15 px-3 py-2 text-on-surface text-sm outline-none focus:border-primary/50" style="background:#faf9f6" />
           <button onclick="jumpToDate()" class="btn-gold w-full py-2 rounded-lg text-sm mt-2">עבור</button>
         </div>
       </div>
 
       <!-- APPOINTMENTS LIST -->
       <div class="lg:col-span-2">
-        <div class="glass rounded-2xl overflow-hidden">
+        <div class="card overflow-hidden">
           <!-- Header -->
-          <div class="px-5 py-4 border-b flex flex-row-reverse justify-between items-center" style="border-color:rgba(255,255,255,0.07)">
-            <h2 class="font-bold text-white text-sm" id="listTitle">כל התורים</h2>
+          <div class="px-5 py-4 border-b border-primary/08 flex flex-row-reverse justify-between items-center" style="border-color:rgba(119,90,25,0.08)">
+            <h2 class="font-bold text-on-surface text-sm" id="listTitle">כל התורים</h2>
             <div class="flex gap-2">
-              <select id="filterStatus" onchange="renderList()" class="text-xs bg-white/06 border border-white/10 rounded-lg px-2 py-1.5 text-white/70 outline-none" style="background:rgba(255,255,255,0.06)">
+              <select id="filterStatus" onchange="renderList()" class="text-xs bg-surface border border-primary/15 rounded-lg px-2 py-1.5 text-on-surface/70 outline-none" style="background:#faf9f6">
                 <option value="all">הכל</option>
                 <option value="active">פעיל</option>
                 <option value="cancelled">בוטל</option>
               </select>
-              <button onclick="selectedDate=null;renderList();renderCalendar()" class="text-xs text-white/40 hover:text-white/70 transition-colors px-2">הצג הכל</button>
+              <button onclick="selectedDate=null;renderList();renderCalendar()" class="text-xs text-outline/50 hover:text-primary transition-colors px-2">הצג הכל</button>
             </div>
           </div>
 
           <!-- List -->
-          <div class="divide-y overflow-y-auto max-h-[520px]" style="divide-color:rgba(255,255,255,0.05)" id="apptList">
+          <div class="divide-y overflow-y-auto max-h-[520px]" style="border-color:rgba(119,90,25,0.08)" id="apptList">
             <!-- Populated by JS -->
           </div>
 
           <!-- Empty state -->
           <div id="emptyState" class="hidden py-16 text-center">
-            <span class="material-symbols-outlined text-white/20 text-5xl block mb-3">calendar_month</span>
-            <p class="text-white/30 text-sm">אין תורים לתאריך זה</p>
+            <span class="material-symbols-outlined text-outline/20 text-5xl block mb-3">calendar_month</span>
+            <p class="text-outline/40 text-sm">אין תורים לתאריך זה</p>
           </div>
         </div>
       </div>
@@ -189,10 +205,11 @@
 <div id="apptModal" class="modal-bg hidden" onclick="closeModal(event)">
   <div class="modal-card fade-in" onclick="event.stopPropagation()">
     <!-- Modal header -->
-    <div class="px-6 py-5 border-b flex flex-row-reverse justify-between items-center" style="border-color:rgba(255,255,255,0.08)">
-      <h3 class="font-bold text-white">פרטי תור</h3>
-      <button onclick="closeModal()" class="text-white/40 hover:text-white/70 transition-colors">
-        <span class="material-symbols-outlined">close</span>
+    <div class="px-6 py-5 border-b flex flex-row-reverse justify-between items-center sticky top-0 bg-white z-10" style="border-color:rgba(119,90,25,0.1)">
+      <h3 class="font-bold text-on-surface">פרטי תור</h3>
+      <button onclick="closeModal()" class="flex items-center gap-1.5 text-outline/50 hover:text-primary transition-colors text-sm font-medium">
+        <span class="material-symbols-outlined text-base">arrow_forward</span>
+        חזור
       </button>
     </div>
 
@@ -201,57 +218,57 @@
       <div class="flex items-center gap-4">
         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#775a19] to-[#e0b96f] flex items-center justify-center text-white text-xl font-bold flex-shrink-0" id="mClientInitial">א</div>
         <div>
-          <p class="text-white font-bold text-xl" id="mClientName">—</p>
+          <p class="text-on-surface font-bold text-xl" id="mClientName">—</p>
           <span class="text-xs px-2 py-0.5 rounded-full inline-block mt-1" id="mStatusBadge">—</span>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-3">
-        <div class="bg-white/04 rounded-xl p-3" style="background:rgba(255,255,255,0.04)">
-          <p class="text-xs text-white/40 mb-1">שירות</p>
-          <p class="text-white font-medium text-sm" id="mService">—</p>
+        <div class="info-cell">
+          <p class="label">שירות</p>
+          <p class="value" id="mService">—</p>
         </div>
-        <div class="bg-white/04 rounded-xl p-3" style="background:rgba(255,255,255,0.04)">
-          <p class="text-xs text-white/40 mb-1">מחיר</p>
-          <p class="text-[#e0b96f] font-bold" id="mPrice">—</p>
+        <div class="info-cell">
+          <p class="label">מחיר</p>
+          <p class="value text-primary font-bold" id="mPrice">—</p>
         </div>
-        <div class="bg-white/04 rounded-xl p-3" style="background:rgba(255,255,255,0.04)">
-          <p class="text-xs text-white/40 mb-1">תאריך</p>
-          <p class="text-white font-medium text-sm" id="mDate">—</p>
+        <div class="info-cell">
+          <p class="label">תאריך</p>
+          <p class="value" id="mDate">—</p>
         </div>
-        <div class="bg-white/04 rounded-xl p-3" style="background:rgba(255,255,255,0.04)">
-          <p class="text-xs text-white/40 mb-1">שעה</p>
-          <p class="text-white font-medium text-sm" id="mTime">—</p>
+        <div class="info-cell">
+          <p class="label">שעה</p>
+          <p class="value" id="mTime">—</p>
         </div>
       </div>
 
-      <div class="bg-white/04 rounded-xl p-3" style="background:rgba(255,255,255,0.04)">
-        <p class="text-xs text-white/40 mb-1">טלפון</p>
-        <p class="text-white font-medium" id="mPhone">—</p>
+      <div class="info-cell">
+        <p class="label">טלפון</p>
+        <p class="value" id="mPhone">—</p>
       </div>
 
-      <div class="bg-white/04 rounded-xl p-3" id="mNotesBox" style="background:rgba(255,255,255,0.04)">
-        <p class="text-xs text-white/40 mb-1">הערות</p>
-        <p class="text-white/70 text-sm" id="mNotes">—</p>
+      <div class="info-cell" id="mNotesBox">
+        <p class="label">הערות</p>
+        <p class="text-outline/70 text-sm" id="mNotes">—</p>
       </div>
     </div>
 
     <!-- Actions -->
-    <div class="px-6 pb-6 space-y-3" id="mActions">
+    <div class="px-6 pb-8 space-y-3" id="mActions">
       <!-- Phone call -->
-      <button id="mCallBtn" onclick="callClient()" class="w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-white/12 text-white font-bold hover:bg-white/06 transition-colors" style="border-color:rgba(255,255,255,0.12)">
-        <span class="material-symbols-outlined text-green-400">phone</span>
+      <button id="mCallBtn" onclick="callClient()" class="w-full flex items-center justify-center gap-3 py-3.5 rounded-xl border font-bold transition-colors hover:bg-green-50" style="border-color:rgba(21,128,61,0.25); color:#15803d">
+        <span class="material-symbols-outlined">phone</span>
         <span id="mCallLabel">התקשרי ללקוחה</span>
       </button>
 
       <!-- WhatsApp — reschedule -->
-      <button onclick="whatsappReschedule()" class="w-full flex items-center justify-center gap-3 py-3 rounded-xl border text-white font-bold hover:bg-white/06 transition-colors" style="border-color:rgba(37,211,102,0.25); color:rgba(255,255,255,0.9)">
+      <button onclick="whatsappReschedule()" class="w-full flex items-center justify-center gap-3 py-3.5 rounded-xl border font-bold transition-colors hover:bg-green-50" style="border-color:rgba(37,211,102,0.3); color:#128c7e">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         הזיזי תור — שלחי WhatsApp
       </button>
 
       <!-- Cancel -->
-      <button id="mCancelBtn" onclick="cancelAppointment()" class="w-full flex items-center justify-center gap-3 py-3 rounded-xl font-bold transition-colors" style="background:rgba(248,113,113,0.1); color:#f87171; border:1px solid rgba(248,113,113,0.2)">
+      <button id="mCancelBtn" onclick="cancelAppointment()" class="w-full flex items-center justify-center gap-3 py-3.5 rounded-xl font-bold transition-colors hover:bg-red-50" style="background:rgba(185,28,28,0.06); color:#b91c1c; border:1px solid rgba(185,28,28,0.15)">
         <span class="material-symbols-outlined">cancel</span>
         ביטול תור
       </button>
