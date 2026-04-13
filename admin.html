@@ -31,12 +31,13 @@
     .stat-card { background:#fff; border:1px solid rgba(119,90,25,0.08); border-radius:1.25rem; box-shadow:0 1px 8px rgba(26,28,26,0.05); }
 
     /* Calendar */
-    .cal-day { aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:.5rem; font-size:13px; font-weight:500; cursor:pointer; transition:all .2s; position:relative; color:#1a1c1a; }
+    .cal-day { min-height:52px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:4px 2px; border-radius:.5rem; font-size:13px; font-weight:500; cursor:pointer; transition:all .2s; position:relative; color:#1a1c1a; }
     .cal-day:hover:not(.empty) { background:rgba(119,90,25,0.07); }
     .cal-day.today { border:1.5px solid #775a19; color:#775a19; font-weight:700; }
     .cal-day.selected { background:#775a19; color:white; }
+    .cal-day.selected .cal-appt-chip { background:rgba(255,255,255,0.25); color:white; }
     .cal-day.empty { cursor:default; }
-    .cal-day.has-appt::after { content:''; position:absolute; bottom:3px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:#775a19; }
+    .cal-appt-chip { font-size:8px; line-height:1.2; background:rgba(119,90,25,0.1); color:#775a19; border-radius:3px; padding:1px 3px; margin-top:2px; width:100%; text-align:center; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 
     /* Appointment row */
     .appt-row { transition:all .2s; cursor:pointer; border-radius:.75rem; }
@@ -150,13 +151,13 @@
           </div>
           <!-- Day headers -->
           <div class="grid grid-cols-7 mb-2">
-            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">א</div>
-            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ב</div>
-            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ג</div>
-            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ד</div>
-            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ה</div>
-            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ו</div>
-            <div class="text-[10px] text-outline/40 text-center py-1 font-bold">ש</div>
+            <div class="text-[9px] text-outline/40 text-center py-1 font-bold">ראשון</div>
+            <div class="text-[9px] text-outline/40 text-center py-1 font-bold">שני</div>
+            <div class="text-[9px] text-outline/40 text-center py-1 font-bold">שלישי</div>
+            <div class="text-[9px] text-outline/40 text-center py-1 font-bold">רביעי</div>
+            <div class="text-[9px] text-outline/40 text-center py-1 font-bold">חמישי</div>
+            <div class="text-[9px] text-outline/40 text-center py-1 font-bold">שישי</div>
+            <div class="text-[9px] text-outline/40 text-center py-1 font-bold">שבת</div>
           </div>
           <div class="grid grid-cols-7 gap-1" id="adminCalGrid"></div>
         </div>
@@ -363,7 +364,12 @@ function renderCalendar() {
   const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
   const today = new Date(); today.setHours(0,0,0,0);
   const appts = getAppointments();
-  const apptDates = new Set(appts.filter(a => a.status !== 'cancelled').map(a => a.date));
+  // Build map: dateStr → active appointments
+  const apptsByDate = {};
+  appts.filter(a => a.status !== 'cancelled').forEach(a => {
+    if (!apptsByDate[a.date]) apptsByDate[a.date] = [];
+    apptsByDate[a.date].push(a);
+  });
 
   // Empty cells
   for (let i = 0; i < firstDay; i++) {
@@ -374,10 +380,32 @@ function renderCalendar() {
     const date = new Date(calYear, calMonth, day); date.setHours(0,0,0,0);
     const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
     d.className = 'cal-day';
-    d.textContent = day;
+
+    // Day number
+    const num = document.createElement('span');
+    num.textContent = day;
+    d.appendChild(num);
+
+    // Appointment chips
+    const dayAppts = apptsByDate[dateStr] || [];
+    dayAppts.sort((a,b) => a.time.localeCompare(b.time));
+    dayAppts.slice(0, 2).forEach(a => {
+      const chip = document.createElement('div');
+      chip.className = 'cal-appt-chip';
+      const firstName = a.name.split(' ')[0];
+      chip.textContent = `${a.time} ${firstName}`;
+      d.appendChild(chip);
+    });
+    if (dayAppts.length > 2) {
+      const more = document.createElement('div');
+      more.className = 'cal-appt-chip';
+      more.style.opacity = '0.6';
+      more.textContent = `+${dayAppts.length - 2} עוד`;
+      d.appendChild(more);
+    }
+
     if (date.getTime() === today.getTime()) d.classList.add('today');
     if (selectedDate === dateStr) d.classList.add('selected');
-    if (apptDates.has(dateStr)) d.classList.add('has-appt');
     d.addEventListener('click', () => { selectedDate = dateStr; renderCalendar(); renderList(); });
     grid.appendChild(d);
   }
@@ -435,18 +463,18 @@ function renderList() {
     row.innerHTML = `
       <div class="flex flex-row-reverse items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-base flex-shrink-0" style="background:${color}22;border:1px solid ${color}44;color:${color}">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-base flex-shrink-0" style="background:${color}20;border:1px solid ${color}40;color:${color}">
             ${appt.name.charAt(0)}
           </div>
           <div>
-            <p class="text-white font-bold text-sm ${isCancelled ? 'line-through' : ''}">${appt.name}</p>
-            <p class="text-white/40 text-xs">${appt.phone}</p>
+            <p class="text-on-surface font-bold text-sm ${isCancelled ? 'line-through opacity-50' : ''}">${appt.name}</p>
+            <p class="text-outline/50 text-xs">${appt.phone}</p>
           </div>
         </div>
         <div class="text-left flex items-center gap-3">
           <div>
-            <p class="text-xs text-white/40">${dateLabel}</p>
-            <p class="text-white/70 font-medium text-sm">${appt.time} | ${appt.service}</p>
+            <p class="text-xs text-outline/50">${dateLabel}</p>
+            <p class="text-on-surface/70 font-medium text-sm">${appt.time} | ${appt.service}</p>
           </div>
           <div class="flex flex-col items-center gap-1">
             <span class="text-xs px-2 py-0.5 rounded-full font-bold ${isCancelled ? 'badge-cancelled' : 'badge-active'}">${isCancelled ? 'בוטל' : 'פעיל'}</span>
