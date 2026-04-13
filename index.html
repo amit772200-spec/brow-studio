@@ -258,90 +258,40 @@
   </header>
 
   <!-- ══════════════════════════════════
-       HERO — BROW BEAUTY centered H1
+       HERO — pure text, centered
   ══════════════════════════════════ -->
-  <section class="relative min-h-screen flex flex-col items-center justify-center pt-20 pb-10 px-5 overflow-hidden">
-    <div class="ambient w-80 h-80 bg-primary-fixed opacity-20 top-10 right-0 left-auto"></div>
-    <div class="ambient w-56 h-56 bg-tertiary-container opacity-15 bottom-24 left-4"></div>
+  <section class="relative flex flex-col items-center justify-center text-center pt-28 pb-16 px-5 overflow-hidden">
+    <div class="ambient w-96 h-96 bg-primary-fixed opacity-20 -top-10 right-0"></div>
+    <div class="ambient w-64 h-64 bg-tertiary-container opacity-15 bottom-0 left-0"></div>
 
-    <!-- Main brand heading — centered -->
-    <div class="text-center w-full mb-8 fade-in d1" style="z-index:1; position:relative;">
-      <h1 class="brand-name text-5xl md:text-7xl tracking-widest block mb-3">BROW BEAUTY</h1>
-      <div class="w-16 h-0.5 bg-gradient-to-l from-transparent via-primary to-transparent mx-auto"></div>
-    </div>
+    <div class="relative z-10 w-full max-w-xl mx-auto">
+      <!-- Brand name -->
+      <h1 class="brand-name text-5xl md:text-6xl tracking-widest block mb-4 fade-in d1">BROW BEAUTY</h1>
+      <div class="w-20 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mb-8 fade-in d1"></div>
 
-    <!-- Two-col layout -->
-    <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center" style="z-index:1; position:relative;">
+      <!-- Subtitle -->
+      <p class="text-3xl md:text-4xl font-display font-bold text-on-surface leading-tight mb-2 fade-in d2">
+        גבות מושלמות.
+      </p>
+      <p class="text-xl md:text-2xl font-display font-light text-outline mb-6 fade-in d2">
+        עיצוב מדויק.
+      </p>
 
-      <!-- Text — fully centered on mobile, right-aligned on desktop -->
-      <div class="text-center lg:text-right order-2 lg:order-1 fade-in d2">
-        <p class="text-3xl md:text-4xl font-display font-bold text-on-surface leading-tight mb-2">
-          גבות מושלמות.
-        </p>
-        <p class="text-2xl md:text-3xl font-display font-light text-outline mb-6">
-          עיצוב מדויק.
-        </p>
-        <p class="text-on-surface-variant text-base md:text-lg leading-relaxed max-w-sm mx-auto lg:mx-0 mb-8">
-          אנו מאמינות שגבות מעוצבות כראוי משנות את כל המראה.<br />
-          הגישה שלנו — מדויקת, אישית, ועם עין לפרטים.
-        </p>
+      <!-- Description -->
+      <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-10 fade-in d3">
+        אנו מאמינות שגבות מעוצבות כראוי משנות את כל המראה.<br />
+        הגישה שלנו — מדויקת, אישית, ועם עין לפרטים.
+      </p>
 
-        <!-- CTA row — centered on mobile -->
-        <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-end items-center">
-          <a href="booking.html" class="btn-gold w-full sm:w-auto px-8 py-4 rounded-full text-base shadow-xl shadow-primary/25 text-center">
-            קביעת תור עכשיו
-          </a>
-          <a href="#categories" class="flex items-center justify-center gap-2 text-on-surface/65 hover:text-primary transition-colors font-medium py-2 group">
-            <span>הצג שירותים</span>
-            <span class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">arrow_right_alt</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Carousel — right side on desktop, top on mobile -->
-      <div class="order-1 lg:order-2 fade-in d3">
-        <div class="relative max-w-[320px] mx-auto lg:mx-0 lg:ml-auto">
-          <div class="hero-carousel-wrap shadow-2xl shadow-primary/15">
-            <div class="hero-track" id="heroTrack">
-              <img class="hero-slide" src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=600&q=85&fit=crop&crop=faces,top" alt="גבות 1" />
-              <img class="hero-slide" src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=85&fit=crop&crop=faces,top" alt="גבות 2" />
-              <img class="hero-slide" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=85&fit=crop&crop=faces,top" alt="גבות 3" />
-              <img class="hero-slide" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=85&fit=crop&crop=faces,top" alt="גבות 4" />
-              <img class="hero-slide" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=85&fit=crop&crop=faces,top" alt="גבות 5" />
-              <img class="hero-slide" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=85&fit=crop&crop=faces,top" alt="גבות 6" />
-              <img class="hero-slide" src="https://images.unsplash.com/photo-1488716820095-cbe80883c496?w=600&q=85&fit=crop&crop=faces,top" alt="גבות 7" />
-              <img class="hero-slide" src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=85&fit=crop&crop=faces,top" alt="גבות 8" />
-              <img class="hero-slide" src="https://images.unsplash.com/photo-1526510747491-58f928ec870f?w=600&q=85&fit=crop&crop=faces,top" alt="גבות 9" />
-              <img class="hero-slide" src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=600&q=85&fit=crop&crop=faces,top" alt="גבות 10" />
-            </div>
-            <button class="carousel-arrow prev" id="heroPrev" aria-label="הקודמת">
-              <span class="material-symbols-outlined text-lg">chevron_right</span>
-            </button>
-            <button class="carousel-arrow next" id="heroNext" aria-label="הבאה">
-              <span class="material-symbols-outlined text-lg">chevron_left</span>
-            </button>
-            <div class="hero-dots" id="heroDots"></div>
-          </div>
-
-          <!-- Floating badge — rating -->
-          <div class="absolute -bottom-4 right-4 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 shadow-xl shadow-primary/10 z-10">
-            <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center">
-                <span class="material-symbols-outlined text-white text-sm filled">star</span>
-              </div>
-              <div>
-                <p class="text-[10px] text-outline leading-none mb-0.5">דירוג לקוחות</p>
-                <p class="font-bold text-on-surface text-base leading-none">4.9 ★</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Floating badge — customers -->
-          <div class="absolute -top-4 left-4 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 shadow-xl shadow-primary/10 z-10">
-            <p class="text-[10px] text-outline leading-none mb-0.5">לקוחות מרוצות</p>
-            <p class="text-xl font-display font-black text-primary leading-none">450+</p>
-          </div>
-        </div>
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center fade-in d4">
+        <a href="booking.html" class="btn-gold w-full sm:w-auto px-10 py-4 rounded-full text-base shadow-xl shadow-primary/25 text-center">
+          קביעת תור עכשיו
+        </a>
+        <a href="#categories" class="flex items-center justify-center gap-2 text-on-surface/60 hover:text-primary transition-colors font-medium py-2 group w-full sm:w-auto">
+          <span>הצג שירותים</span>
+          <span class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">arrow_right_alt</span>
+        </a>
       </div>
     </div>
   </section>
@@ -728,10 +678,10 @@
         </div>
         <p class="text-outline text-xs">© 2024 BROW BEAUTY</p>
       </div>
-      <!-- Admin link — discreet, only visible if you know to look -->
+      <!-- Admin link -->
       <div class="text-center mt-4">
-        <a href="admin.html" class="text-outline-variant/40 hover:text-outline transition-colors text-[10px] tracking-widest" title="ניהול">
-          · · ·
+        <a href="admin.html" class="text-outline-variant hover:text-primary transition-colors text-xs tracking-[0.25em] font-medium uppercase">
+          ADMIN
         </a>
       </div>
     </div>

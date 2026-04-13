@@ -18,8 +18,9 @@
     /* Login screen */
     #loginScreen { position:fixed; inset:0; z-index:100; background:#0f0f13; display:flex; align-items:center; justify-content:center; }
     .login-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:1.5rem; padding:2.5rem; width:100%; max-width:360px; }
-    .pin-input { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:.75rem; color:white; font-size:1.5rem; text-align:center; letter-spacing:.5rem; outline:none; width:100%; padding:.75rem; transition:border-color .2s; }
+    .pin-input { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:.75rem; color:white; font-size:1rem; text-align:right; outline:none; width:100%; padding:.75rem 1rem; transition:border-color .2s; }
     .pin-input:focus { border-color:rgba(224,185,111,0.5); }
+    #passwordInput { letter-spacing:.2rem; font-size:1.25rem; }
     .btn-gold { background:linear-gradient(135deg,#775a19,#e0b96f); color:white; font-weight:700; border:none; cursor:pointer; transition:all .3s; }
     .btn-gold:hover { transform:translateY(-1px); box-shadow:0 8px 20px rgba(119,90,25,.35); }
 
@@ -62,13 +63,16 @@
       <span class="brand-name text-2xl tracking-widest block mb-2">BROW BEAUTY</span>
       <p class="text-white/40 text-sm">כניסת מנהל</p>
     </div>
+    <div class="mb-4">
+      <label class="block text-xs font-bold text-white/40 tracking-wider uppercase mb-2">שם משתמש</label>
+      <input type="text" id="usernameInput" class="pin-input" placeholder="admin" autocomplete="username" />
+    </div>
     <div class="mb-6">
-      <label class="block text-xs font-bold text-white/40 tracking-wider uppercase mb-3 text-center">קוד גישה</label>
-      <input type="password" id="pinInput" class="pin-input" placeholder="••••" maxlength="6" />
-      <p id="pinError" class="text-red-400 text-xs text-center mt-2 hidden">קוד שגוי. נסי שוב.</p>
+      <label class="block text-xs font-bold text-white/40 tracking-wider uppercase mb-2">סיסמה</label>
+      <input type="password" id="passwordInput" class="pin-input" placeholder="••••••" autocomplete="current-password" />
+      <p id="pinError" class="text-red-400 text-xs text-center mt-2 hidden">שם משתמש או סיסמה שגויים. נסי שוב.</p>
     </div>
     <button onclick="doLogin()" class="btn-gold w-full py-3 rounded-xl text-base">כניסה</button>
-    <p class="text-white/25 text-xs text-center mt-4">קוד ברירת מחדל: <span class="font-mono text-white/40">1234</span></p>
   </div>
 </div>
 
@@ -256,30 +260,35 @@
 // ═══════════════════════════════════
 //  CONFIG — שני פרמטרים לשינוי
 // ═══════════════════════════════════
-const ADMIN_PIN = '1234';          // ← שני כאן את הסיסמה
-const STUDIO_PHONE = '0501234567'; // ← מספר הטלפון של הסטודיו
+const ADMIN_USERNAME = 'admin';      // ← שני כאן את שם המשתמש
+const ADMIN_PASSWORD = '1234';       // ← שני כאן את הסיסמה
+const STUDIO_PHONE = '0501234567';   // ← מספר הטלפון של הסטודיו
 
 // ═══════════════════════════════════
 //  LOGIN
 // ═══════════════════════════════════
 function doLogin() {
-  const val = document.getElementById('pinInput').value.trim();
-  if (val === ADMIN_PIN) {
+  const username = document.getElementById('usernameInput').value.trim();
+  const password = document.getElementById('passwordInput').value.trim();
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminApp').classList.remove('hidden');
     init();
   } else {
     document.getElementById('pinError').classList.remove('hidden');
-    document.getElementById('pinInput').value = '';
-    document.getElementById('pinInput').focus();
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('passwordInput').focus();
   }
 }
-document.getElementById('pinInput').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('passwordInput').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('usernameInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('passwordInput').focus(); });
 
 function logout() {
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('adminApp').classList.add('hidden');
-  document.getElementById('pinInput').value = '';
+  document.getElementById('usernameInput').value = '';
+  document.getElementById('passwordInput').value = '';
+  document.getElementById('pinError').classList.add('hidden');
 }
 
 // ═══════════════════════════════════
