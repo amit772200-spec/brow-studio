@@ -199,6 +199,48 @@
         </div>
       </div>
     </div>
+
+    <!-- ══ AVAILABILITY SETTINGS ══ -->
+    <div class="mt-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="material-symbols-outlined text-primary">tune</span>
+        <h2 class="font-bold text-on-surface text-lg">הגדרות זמינות</h2>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Working Hours -->
+        <div class="card p-5">
+          <h3 class="font-bold text-on-surface mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-lg">schedule</span>
+            שעות עבודה
+          </h3>
+          <div class="space-y-3" id="workingHoursRows">
+            <!-- filled by JS -->
+          </div>
+          <button onclick="saveWorkingHours()" class="btn-gold w-full py-2.5 rounded-xl text-sm mt-5">שמור שעות עבודה</button>
+          <p id="whSaveMsg" class="text-green-600 text-xs text-center mt-2 hidden">נשמר בהצלחה ✓</p>
+        </div>
+
+        <!-- Blocked Dates -->
+        <div class="card p-5">
+          <h3 class="font-bold text-on-surface mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-lg">event_busy</span>
+            ימים חסומים
+          </h3>
+          <p class="text-xs text-outline/50 mb-3">בחרי תאריך שלא יהיה זמין לקביעת תורים</p>
+          <div class="flex gap-2 mb-4">
+            <input type="date" id="blockDateInput" class="flex-1 bg-surface rounded-lg border border-primary/15 px-3 py-2 text-on-surface text-sm outline-none focus:border-primary/50" style="background:#faf9f6" />
+            <button onclick="addBlockedDate()" class="btn-gold px-4 py-2 rounded-lg text-sm flex-shrink-0">חסמי</button>
+          </div>
+          <div id="blockedDatesList" class="space-y-2 max-h-52 overflow-y-auto">
+            <!-- filled by JS -->
+          </div>
+          <div id="blockedEmpty" class="text-center py-6 text-outline/30 text-sm">אין ימים חסומים</div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -585,6 +627,125 @@ function cancelAppointment() {
 }
 
 // ═══════════════════════════════════
+//  AVAILABILITY SETTINGS
+// ═══════════════════════════════════
+const DAY_NAMES = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+
+const DEFAULT_WORKING_HOURS = {
+  0: { active: true,  start: '09:00', end: '19:00' }, // ראשון
+  1: { active: true,  start: '09:00', end: '19:00' }, // שני
+  2: { active: true,  start: '09:00', end: '19:00' }, // שלישי
+  3: { active: true,  start: '09:00', end: '19:00' }, // רביעי
+  4: { active: true,  start: '09:00', end: '19:00' }, // חמישי
+  5: { active: true,  start: '09:00', end: '15:00' }, // שישי
+  6: { active: false, start: '09:00', end: '19:00' }, // שבת
+};
+
+function getWorkingHours() {
+  try { return JSON.parse(localStorage.getItem('bb_working_hours')) || DEFAULT_WORKING_HOURS; }
+  catch { return DEFAULT_WORKING_HOURS; }
+}
+
+function getBlockedDates() {
+  try { return JSON.parse(localStorage.getItem('bb_blocked_dates')) || []; }
+  catch { return []; }
+}
+
+function renderWorkingHoursUI() {
+  const wh = getWorkingHours();
+  const container = document.getElementById('workingHoursRows');
+  container.innerHTML = '';
+  [0,1,2,3,4,5,6].forEach(day => {
+    const d = wh[day] || DEFAULT_WORKING_HOURS[day];
+    const row = document.createElement('div');
+    row.className = 'flex items-center gap-3';
+    row.innerHTML = `
+      <label class="flex items-center gap-2 cursor-pointer w-24 flex-shrink-0">
+        <div class="relative">
+          <input type="checkbox" id="wh_active_${day}" class="sr-only peer" ${d.active ? 'checked' : ''} />
+          <div class="w-9 h-5 bg-outline/20 rounded-full peer peer-checked:bg-primary transition-colors"></div>
+          <div class="absolute top-0.5 right-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-[-16px] shadow-sm"></div>
+        </div>
+        <span class="text-sm font-medium text-on-surface">${DAY_NAMES[day]}</span>
+      </label>
+      <div class="flex items-center gap-2 flex-1" id="wh_times_${day}" style="${d.active ? '' : 'opacity:0.3;pointer-events:none'}">
+        <input type="time" id="wh_start_${day}" value="${d.start}" class="flex-1 bg-surface border border-primary/15 rounded-lg px-2 py-1.5 text-sm text-on-surface outline-none focus:border-primary/50" style="background:#faf9f6" />
+        <span class="text-outline/40 text-xs">עד</span>
+        <input type="time" id="wh_end_${day}" value="${d.end}" class="flex-1 bg-surface border border-primary/15 rounded-lg px-2 py-1.5 text-sm text-on-surface outline-none focus:border-primary/50" style="background:#faf9f6" />
+      </div>
+    `;
+    container.appendChild(row);
+    // Toggle times opacity on change
+    row.querySelector(`#wh_active_${day}`).addEventListener('change', e => {
+      const timesEl = document.getElementById(`wh_times_${day}`);
+      timesEl.style.opacity = e.target.checked ? '1' : '0.3';
+      timesEl.style.pointerEvents = e.target.checked ? '' : 'none';
+    });
+  });
+}
+
+function saveWorkingHours() {
+  const wh = {};
+  [0,1,2,3,4,5,6].forEach(day => {
+    wh[day] = {
+      active: document.getElementById(`wh_active_${day}`).checked,
+      start:  document.getElementById(`wh_start_${day}`).value || '09:00',
+      end:    document.getElementById(`wh_end_${day}`).value || '19:00',
+    };
+  });
+  localStorage.setItem('bb_working_hours', JSON.stringify(wh));
+  const msg = document.getElementById('whSaveMsg');
+  msg.classList.remove('hidden');
+  setTimeout(() => msg.classList.add('hidden'), 2000);
+  renderCalendar(); // refresh calendar dots
+}
+
+function renderBlockedDatesUI() {
+  const dates = getBlockedDates();
+  const list = document.getElementById('blockedDatesList');
+  const empty = document.getElementById('blockedEmpty');
+  list.innerHTML = '';
+  if (dates.length === 0) { empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  dates.sort().forEach(dateStr => {
+    const [y,m,d] = dateStr.split('-');
+    const label = `${parseInt(d)} ${hebrewMonths[parseInt(m)-1]} ${y}`;
+    const item = document.createElement('div');
+    item.className = 'flex items-center justify-between bg-red-50 border border-red-100 rounded-xl px-4 py-2.5';
+    item.innerHTML = `
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-red-400 text-base">event_busy</span>
+        <span class="text-sm font-medium text-on-surface">${label}</span>
+      </div>
+      <button onclick="removeBlockedDate('${dateStr}')" class="text-red-400 hover:text-red-600 transition-colors">
+        <span class="material-symbols-outlined text-base">close</span>
+      </button>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function addBlockedDate() {
+  const val = document.getElementById('blockDateInput').value;
+  if (!val) return;
+  const dates = getBlockedDates();
+  if (!dates.includes(val)) {
+    dates.push(val);
+    localStorage.setItem('bb_blocked_dates', JSON.stringify(dates));
+  }
+  document.getElementById('blockDateInput').value = '';
+  renderBlockedDatesUI();
+  renderCalendar();
+}
+
+function removeBlockedDate(dateStr) {
+  const dates = getBlockedDates().filter(d => d !== dateStr);
+  localStorage.setItem('bb_blocked_dates', JSON.stringify(dates));
+  renderBlockedDatesUI();
+  renderCalendar();
+}
+
+// ═══════════════════════════════════
 //  INIT
 // ═══════════════════════════════════
 function init() {
@@ -592,6 +753,8 @@ function init() {
   renderCalendar();
   renderList();
   updateStats();
+  renderWorkingHoursUI();
+  renderBlockedDatesUI();
 }
 </script>
 </body>
