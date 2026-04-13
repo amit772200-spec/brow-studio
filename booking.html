@@ -500,7 +500,7 @@
       return slots;
     }
 
-    function renderTimeSlots() {
+    async function renderTimeSlots() {
       const wh = getWorkingHours();
       let startTime = '09:00', endTime = '19:00';
       if (state.date && wh) {
@@ -509,10 +509,16 @@
       }
       const slots = generateSlots(startTime, endTime, 45);
 
-      // Booked slots from existing appointments
-      const existingAppts = JSON.parse(localStorage.getItem('bb_appointments') || '[]');
+      // Booked slots from Supabase
       const dateStr = state.date ? `${state.date.getFullYear()}-${String(state.date.getMonth()+1).padStart(2,'0')}-${String(state.date.getDate()).padStart(2,'0')}` : '';
-      const booked = existingAppts.filter(a => a.date === dateStr && a.status !== 'cancelled').map(a => a.time);
+      let booked = [];
+      try {
+        const res = await fetch(`${SB_URL}/rest/v1/appointments?select=time&date=eq.${dateStr}&status=eq.active`, {
+          headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+        });
+        const data = await res.json();
+        booked = data.map(a => a.time);
+      } catch(e) { console.warn('Could not fetch booked slots', e); }
 
       const grid = document.getElementById('timeSlots'); grid.innerHTML = '';
       state.time = null;
@@ -579,31 +585,47 @@
     document.getElementById('backToStep1').addEventListener('click', () => setStep(1));
     document.getElementById('backToStep2').addEventListener('click', () => setStep(2));
 
-    document.getElementById('confirmBooking').addEventListener('click', () => {
+    // ── Supabase config ──
+    const SB_URL = 'https://xnpghrmvsxylokvjgoka.supabase.co';
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhucGdocm12c3h5bG9rdmpnb2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwNzA5MzksImV4cCI6MjA5MTY0NjkzOX0.l4JlLQnFcoGbN65DiWVMu4lOCtAOtRii4W4HBrQ8C1o';
+
+    document.getElementById('confirmBooking').addEventListener('click', async () => {
       const name = document.getElementById('clientName').value.trim();
       const phone = document.getElementById('clientPhone').value.trim();
       const email = document.getElementById('clientEmail').value.trim();
       const notes = document.getElementById('clientNotes').value.trim();
       if (!name || !phone) { alert('נא מלאי שם מלא ומספר טלפון.'); return; }
 
-      // ── Save appointment to localStorage ──
+      const btn = document.getElementById('confirmBooking');
+      btn.disabled = true;
+      btn.textContent = 'שומרת...';
+
       const appt = {
         id: Math.random().toString(36).substr(2,9),
         name, phone, email, notes,
         service: state.serviceName,
         price: state.servicePrice,
-        duration: state.serviceDuration,
         date: state.date ? state.date.toISOString().slice(0,10) : '',
-        dateLabel: state.dateLabel,
+        date_label: state.dateLabel,
         time: state.time,
-        status: 'active',
-        createdAt: new Date().toISOString()
+        status: 'active'
       };
+
       try {
-        const existing = JSON.parse(localStorage.getItem('bb_appointments') || '[]');
-        existing.push(appt);
-        localStorage.setItem('bb_appointments', JSON.stringify(existing));
-      } catch(e) { console.warn('Could not save appointment', e); }
+        await fetch(`${SB_URL}/rest/v1/appointments`, {
+          method: 'POST',
+          headers: {
+            'apikey': SB_KEY,
+            'Authorization': `Bearer ${SB_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(appt)
+        });
+      } catch(e) { console.warn('Could not save to Supabase', e); }
+
+      btn.disabled = false;
+      btn.textContent = 'אשרי הזמנה ✓';
 
       // ── Show confirmation ──
       document.getElementById('conf-service').textContent = state.serviceName;

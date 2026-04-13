@@ -360,40 +360,61 @@ function logout() {
 }
 
 // ═══════════════════════════════════
-//  DATA — localStorage
+//  SUPABASE CONFIG
 // ═══════════════════════════════════
-function getAppointments() {
-  try { return JSON.parse(localStorage.getItem('bb_appointments') || '[]'); }
-  catch { return []; }
-}
-function saveAppointments(arr) {
-  localStorage.setItem('bb_appointments', JSON.stringify(arr));
+const SB_URL = 'https://xnpghrmvsxylokvjgoka.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhucGdocm12c3h5bG9rdmpnb2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwNzA5MzksImV4cCI6MjA5MTY0NjkzOX0.l4JlLQnFcoGbN65DiWVMu4lOCtAOtRii4W4HBrQ8C1o';
+const SB_HEADERS = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' };
+
+async function sbFetch(path, options = {}) {
+  const res = await fetch(`${SB_URL}/rest/v1/${path}`, { headers: SB_HEADERS, ...options });
+  if (!res.ok) { console.error('Supabase error', res.status, await res.text()); return null; }
+  return res.json();
 }
 
-// ─── Seed demo data if empty ───
-function seedDemoData() {
-  const existing = getAppointments();
-  if (existing.length > 0) return;
+// ═══════════════════════════════════
+//  DATA — Supabase
+// ═══════════════════════════════════
+let _cachedAppts = null;
+
+async function loadAppointments() {
+  const data = await sbFetch('appointments?select=*&order=date.asc,time.asc');
+  _cachedAppts = data || [];
+  return _cachedAppts;
+}
+
+function getAppointments() {
+  return _cachedAppts || [];
+}
+
+async function cancelAppointmentInDB(id) {
+  return sbFetch(`appointments?id=eq.${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status: 'cancelled' })
+  });
+}
+
+function genId() { return Math.random().toString(36).substr(2,9); }
+
+async function seedDemoData() {
+  // Only seed if DB is empty
+  const existing = await sbFetch('appointments?select=id&limit=1');
+  if (existing && existing.length > 0) return;
 
   const today = new Date();
-  const fmt = (d) => {
-    const dd = String(d.getDate()).padStart(2,'0');
-    const mm = String(d.getMonth()+1).padStart(2,'0');
-    return `${d.getFullYear()}-${mm}-${dd}`;
-  };
+  const fmt = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   const addDays = (n) => { const d = new Date(today); d.setDate(d.getDate()+n); return d; };
 
   const demos = [
-    { id: genId(), name: 'שירה כהן', phone: '0541234567', email: '', service: 'עיצוב גבות', price: 120, date: fmt(today), time: '10:30', notes: '', status: 'active', createdAt: new Date().toISOString() },
-    { id: genId(), name: 'מיכל לוי', phone: '0521234567', email: 'michal@gmail.com', service: 'מיקרובליידינג', price: 1200, date: fmt(today), time: '14:00', notes: 'רגישות לניקל', status: 'active', createdAt: new Date().toISOString() },
-    { id: genId(), name: 'דנה ישראלי', phone: '0531234567', email: '', service: 'גבות + שפם', price: 180, date: fmt(addDays(1)), time: '09:00', notes: '', status: 'active', createdAt: new Date().toISOString() },
-    { id: genId(), name: 'נועה גולן', phone: '0501234567', email: '', service: 'החבילה המשתלמת', price: 320, date: fmt(addDays(2)), time: '11:15', notes: 'לקוחה חוזרת', status: 'active', createdAt: new Date().toISOString() },
-    { id: genId(), name: 'תמר אביב', phone: '0521112233', email: '', service: 'שעווה בפנים', price: 250, date: fmt(addDays(3)), time: '16:30', notes: '', status: 'active', createdAt: new Date().toISOString() },
-    { id: genId(), name: 'ליאת רוזן', phone: '0541112233', email: '', service: 'צביעת גבות', price: 80, date: fmt(addDays(-1)), time: '13:00', notes: '', status: 'cancelled', createdAt: new Date().toISOString() },
+    { id: genId(), name: 'שירה כהן', phone: '0541234567', email: '', service: 'עיצוב גבות', price: 120, date: fmt(today), date_label: 'היום', time: '10:30', notes: '', status: 'active' },
+    { id: genId(), name: 'מיכל לוי', phone: '0521234567', email: 'michal@gmail.com', service: 'מיקרובליידינג', price: 1200, date: fmt(today), date_label: 'היום', time: '14:00', notes: 'רגישות לניקל', status: 'active' },
+    { id: genId(), name: 'דנה ישראלי', phone: '0531234567', email: '', service: 'גבות + שפם', price: 180, date: fmt(addDays(1)), date_label: 'מחר', time: '09:00', notes: '', status: 'active' },
+    { id: genId(), name: 'נועה גולן', phone: '0501234567', email: '', service: 'החבילה המשתלמת', price: 320, date: fmt(addDays(2)), date_label: '', time: '11:15', notes: 'לקוחה חוזרת', status: 'active' },
+    { id: genId(), name: 'תמר אביב', phone: '0521112233', email: '', service: 'שעווה בפנים', price: 250, date: fmt(addDays(3)), date_label: '', time: '16:30', notes: '', status: 'active' },
+    { id: genId(), name: 'ליאת רוזן', phone: '0541112233', email: '', service: 'צביעת גבות', price: 80, date: fmt(addDays(-1)), date_label: '', time: '13:00', notes: '', status: 'cancelled' },
   ];
-  saveAppointments(demos);
+  await sbFetch('appointments', { method: 'POST', body: JSON.stringify(demos) });
 }
-function genId() { return Math.random().toString(36).substr(2,9); }
 
 // ═══════════════════════════════════
 //  CALENDAR
@@ -623,27 +644,27 @@ function whatsappReschedule() {
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
-function cancelAppointment() {
+async function cancelAppointment() {
   if (!currentAppt) return;
   if (!confirm(`לבטל את התור של ${currentAppt.name}?`)) return;
-  const appts = getAppointments();
-  const idx = appts.findIndex(a => a.id === currentAppt.id);
-  if (idx !== -1) {
-    appts[idx].status = 'cancelled';
-    saveAppointments(appts);
 
-    // Send WhatsApp cancellation
-    const [y,m,d] = currentAppt.date.split('-');
-    const dateLabel = `${parseInt(d)} ${hebrewMonths[parseInt(m)-1]} ${y}`;
-    const msg = `שלום ${currentAppt.name},\nכאן BROW BEAUTY.\nלצערנו, נאלצנו לבטל את התור שנקבע ל-${dateLabel} בשעה ${currentAppt.time}.\nנשמח לקבוע תור חדש בהקדם 🙏`;
-    const phone = currentAppt.phone.replace(/[^0-9]/g, '').replace(/^0/, '972');
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+  await cancelAppointmentInDB(currentAppt.id);
 
-    closeModal();
-    updateStats();
-    renderCalendar();
-    renderList();
-  }
+  // Update local cache
+  const idx = _cachedAppts.findIndex(a => a.id === currentAppt.id);
+  if (idx !== -1) _cachedAppts[idx].status = 'cancelled';
+
+  // Send WhatsApp cancellation
+  const [y,m,d] = currentAppt.date.split('-');
+  const dateLabel = `${parseInt(d)} ${hebrewMonths[parseInt(m)-1]} ${y}`;
+  const msg = `שלום ${currentAppt.name},\nכאן BROW BEAUTY.\nלצערנו, נאלצנו לבטל את התור שנקבע ל-${dateLabel} בשעה ${currentAppt.time}.\nנשמח לקבוע תור חדש בהקדם 🙏`;
+  const phone = currentAppt.phone.replace(/[^0-9]/g, '').replace(/^0/, '972');
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+
+  closeModal();
+  updateStats();
+  renderCalendar();
+  renderList();
 }
 
 // ═══════════════════════════════════
@@ -768,8 +789,11 @@ function removeBlockedDate(dateStr) {
 // ═══════════════════════════════════
 //  INIT
 // ═══════════════════════════════════
-function init() {
-  seedDemoData();
+async function init() {
+  // Show loading indicator
+  document.getElementById('apptList').innerHTML = '<div class="py-10 text-center text-outline/40 text-sm">טוען תורים...</div>';
+  await seedDemoData();
+  await loadAppointments();
   renderCalendar();
   renderList();
   updateStats();
