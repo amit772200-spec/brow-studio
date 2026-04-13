@@ -333,6 +333,11 @@
               <span class="material-symbols-outlined text-base">cancel</span>
               ביטול תור
             </button>
+            <!-- כפתור Google Calendar — יוצג אוטומטית כש-GCAL_ENABLED=true -->
+            <button id="gcalBtn" onclick="addToGoogleCalendar()" class="hidden inline-flex items-center gap-2 px-8 py-4 rounded-full text-base w-full justify-center border border-outline-variant hover:bg-surface-container transition-colors font-medium">
+              <span class="material-symbols-outlined text-base">event_add</span>
+              הוספה ל-Google Calendar
+            </button>
             <p class="text-[10px] text-outline/50 text-center">ביטול עד 24 שעות לפני התור — ישלח הודעת WhatsApp לסטודיו</p>
           </div>
         </div>
@@ -353,10 +358,6 @@
             </div>
           </div>
           <div class="space-y-3">
-            <div class="flex items-center gap-3 text-outline text-sm">
-              <span class="material-symbols-outlined text-base">schedule</span>
-              <span id="sum-duration">—</span>
-            </div>
             <div class="flex items-center gap-3 text-outline text-sm">
               <span class="material-symbols-outlined text-base">location_on</span>
               <span>רחוב הגפן 42, תל אביב</span>
@@ -553,7 +554,6 @@
     function updateSummary() {
       document.getElementById('sum-service').textContent = state.serviceName || 'לא נבחר שירות';
       document.getElementById('sum-price').textContent = state.servicePrice ? `₪${state.servicePrice.toLocaleString()}` : '—';
-      document.getElementById('sum-duration').textContent = state.serviceDuration ? `${state.serviceDuration} דקות` : '—';
       let dt = '';
       if (state.date) dt += state.dateLabel;
       if (state.time) dt += ` | ${state.time}`;
@@ -644,6 +644,47 @@
     });
 
     const STUDIO_PHONE = '0501234567'; // ← שני למספר הטלפון של הסטודיו
+
+    // ─────────────────────────────────────────────────────────────
+    // Google Calendar — תשתית מוכנה, לא מופעל
+    // כדי להפעיל: שני את GCAL_ENABLED ל-true
+    // ─────────────────────────────────────────────────────────────
+    const GCAL_ENABLED = false;
+
+    function addToGoogleCalendar() {
+      const service  = document.getElementById('conf-service').textContent;
+      const dateStr  = document.getElementById('conf-date').textContent;   // e.g. "ראשון, 15 אפריל 2025"
+      const timeStr  = document.getElementById('conf-time').textContent;   // e.g. "10:30"
+
+      // ── Parse date + time into Date object ──
+      const months = { 'ינואר':0,'פברואר':1,'מרץ':2,'אפריל':3,'מאי':4,'יוני':5,'יולי':6,'אוגוסט':7,'ספטמבר':8,'אוקטובר':9,'נובמבר':10,'דצמבר':11 };
+      const parts = dateStr.replace(/.*?,\s*/, '').split(' ');  // ["15","אפריל","2025"]
+      const day   = parseInt(parts[0]);
+      const month = months[parts[1]];
+      const year  = parseInt(parts[2]);
+      const [hh, mm] = timeStr.split(':').map(Number);
+
+      const start = new Date(year, month, day, hh, mm);
+      const durationMin = state.serviceDuration || 60;
+      const end   = new Date(start.getTime() + durationMin * 60000);
+
+      const fmt = d => d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+
+      const params = new URLSearchParams({
+        action: 'TEMPLATE',
+        text:   `BROW BEAUTY — ${service}`,
+        dates:  `${fmt(start)}/${fmt(end)}`,
+        details:'תור בסטודיו BROW BEAUTY',
+        location:'BROW BEAUTY Studio',
+      });
+      window.open(`https://calendar.google.com/calendar/render?${params}`, '_blank');
+    }
+
+    // הצג את כפתור Google Calendar רק אם מופעל
+    if (GCAL_ENABLED) {
+      const gcalBtn = document.getElementById('gcalBtn');
+      if (gcalBtn) gcalBtn.classList.remove('hidden');
+    }
 
     function cancelViaWhatsapp() {
       const service = document.getElementById('conf-service').textContent;
