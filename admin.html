@@ -37,6 +37,11 @@
     .cal-day.selected { background:#775a19; color:white; }
     .cal-day.selected .cal-appt-chip { background:rgba(255,255,255,0.25); color:white; }
     .cal-day.empty { cursor:default; }
+    .cal-day.blocked { background:rgba(0,0,0,0.04); color:#b0b0a8 !important; cursor:not-allowed; }
+    .cal-day.blocked span { text-decoration:line-through; opacity:0.5; }
+    .cal-day.blocked .cal-blocked-label { font-size:8px; color:#b0b0a8; margin-top:2px; }
+    .cal-day.day-off { color:#c0bfba; cursor:default; }
+    .cal-day.day-off span { opacity:0.4; }
     .cal-appt-chip { font-size:8px; line-height:1.2; background:rgba(119,90,25,0.1); color:#775a19; border-radius:3px; padding:1px 3px; margin-top:2px; width:100%; text-align:center; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 
     /* Appointment row */
@@ -406,6 +411,9 @@ function renderCalendar() {
   const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
   const today = new Date(); today.setHours(0,0,0,0);
   const appts = getAppointments();
+  const blockedDates = getBlockedDates();
+  const workingHours = getWorkingHours();
+
   // Build map: dateStr → active appointments
   const apptsByDate = {};
   appts.filter(a => a.status !== 'cancelled').forEach(a => {
@@ -421,6 +429,8 @@ function renderCalendar() {
     const d = document.createElement('div');
     const date = new Date(calYear, calMonth, day); date.setHours(0,0,0,0);
     const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    const isBlocked = blockedDates.includes(dateStr);
+    const isDayOff = workingHours ? !workingHours[date.getDay()]?.active : date.getDay() === 6;
     d.className = 'cal-day';
 
     // Day number
@@ -428,22 +438,32 @@ function renderCalendar() {
     num.textContent = day;
     d.appendChild(num);
 
-    // Appointment chips
-    const dayAppts = apptsByDate[dateStr] || [];
-    dayAppts.sort((a,b) => a.time.localeCompare(b.time));
-    dayAppts.slice(0, 2).forEach(a => {
-      const chip = document.createElement('div');
-      chip.className = 'cal-appt-chip';
-      const firstName = a.name.split(' ')[0];
-      chip.textContent = `${a.time} ${firstName}`;
-      d.appendChild(chip);
-    });
-    if (dayAppts.length > 2) {
-      const more = document.createElement('div');
-      more.className = 'cal-appt-chip';
-      more.style.opacity = '0.6';
-      more.textContent = `+${dayAppts.length - 2} עוד`;
-      d.appendChild(more);
+    if (isBlocked) {
+      d.classList.add('blocked');
+      const lbl = document.createElement('div');
+      lbl.className = 'cal-blocked-label';
+      lbl.textContent = 'חסום';
+      d.appendChild(lbl);
+    } else if (isDayOff) {
+      d.classList.add('day-off');
+    } else {
+      // Appointment chips
+      const dayAppts = apptsByDate[dateStr] || [];
+      dayAppts.sort((a,b) => a.time.localeCompare(b.time));
+      dayAppts.slice(0, 2).forEach(a => {
+        const chip = document.createElement('div');
+        chip.className = 'cal-appt-chip';
+        const firstName = a.name.split(' ')[0];
+        chip.textContent = `${a.time} ${firstName}`;
+        d.appendChild(chip);
+      });
+      if (dayAppts.length > 2) {
+        const more = document.createElement('div');
+        more.className = 'cal-appt-chip';
+        more.style.opacity = '0.6';
+        more.textContent = `+${dayAppts.length - 2} עוד`;
+        d.appendChild(more);
+      }
     }
 
     if (date.getTime() === today.getTime()) d.classList.add('today');
