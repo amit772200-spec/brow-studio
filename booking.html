@@ -397,8 +397,9 @@
     const hebrewMonths = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
     const hebrewDays = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
 
-    // URL pre-select
-    const preService = new URLSearchParams(window.location.search).get('service');
+    // Pre-select service passed via localStorage (set by index.html service cards)
+    const preService = localStorage.getItem('bb_preselect_service') || new URLSearchParams(window.location.search).get('service');
+    localStorage.removeItem('bb_preselect_service');
 
     // Service selection
     document.querySelectorAll('.service-card').forEach(card => {
