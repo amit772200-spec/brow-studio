@@ -3,20 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>סטודיו גבות | עיצוב גבות מקצועי</title>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>BROW BEAUTY | עיצוב גבות מקצועי</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           colors: {
             primary: '#775a19',
             'primary-container': '#e0b96f',
             'primary-fixed': '#ffdea5',
-            'primary-fixed-dim': '#e9c176',
             'on-primary': '#ffffff',
             'on-primary-container': '#644907',
             secondary: '#685c56',
@@ -25,29 +23,19 @@
             tertiary: '#735858',
             'tertiary-container': '#d9b7b7',
             surface: '#faf9f6',
-            'surface-bright': '#faf9f6',
-            'surface-dim': '#dbdad7',
             'surface-container-lowest': '#ffffff',
             'surface-container-low': '#f4f3f1',
             'surface-container': '#efeeeb',
             'surface-container-high': '#e9e8e5',
-            'surface-container-highest': '#e3e2e0',
             'on-surface': '#1a1c1a',
             'on-surface-variant': '#4e453d',
             outline: '#80756c',
             'outline-variant': '#d2c4b9',
-            background: '#faf9f6',
           },
           fontFamily: {
-            headline: ['Manrope', 'Heebo', 'sans-serif'],
+            headline: ['Playfair Display', 'Manrope', 'sans-serif'],
+            display: ['Playfair Display', 'serif'],
             body: ['Heebo', 'sans-serif'],
-          },
-          borderRadius: {
-            DEFAULT: '0.125rem',
-            lg: '0.25rem',
-            xl: '0.75rem',
-            '2xl': '1rem',
-            full: '9999px',
           },
         },
       },
@@ -55,607 +43,509 @@
   </script>
   <style>
     * { box-sizing: border-box; }
+    body { font-family: 'Heebo', sans-serif; background: #faf9f6; color: #1a1c1a; overflow-x: hidden; }
 
-    body {
-      font-family: 'Heebo', sans-serif;
-      background: #faf9f6;
-      color: #1a1c1a;
-      overflow-x: hidden;
-    }
-
-    /* ========== FLOATING SQUARES EFFECT ========== */
-    .float-card {
-      position: relative;
-      transform-style: preserve-3d;
-      transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px);
-      transition:
-        transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
-        box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-      will-change: transform, box-shadow;
-      cursor: pointer;
-    }
-
-    .float-card:hover {
-      transform: perspective(1000px) rotateX(-4deg) rotateY(4deg) translateZ(20px) translateY(-8px);
-      box-shadow:
-        20px 30px 60px rgba(119, 90, 25, 0.12),
-        0 8px 24px rgba(26, 28, 26, 0.08),
-        0 2px 8px rgba(119, 90, 25, 0.06);
-    }
-
-    .float-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .float-card:hover::before { opacity: 1; }
-
-    .float-card .card-shine {
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(224, 185, 111, 0.15) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    .float-card:hover .card-shine { opacity: 1; }
-
-    /* Float animation keyframes */
-    @keyframes floatUp {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-6px); }
-    }
-
-    .float-card.float-idle {
-      animation: floatUp 4s ease-in-out infinite;
-    }
-    .float-card:nth-child(2).float-idle { animation-delay: 0.5s; }
-    .float-card:nth-child(3).float-idle { animation-delay: 1s; }
-    .float-card:nth-child(4).float-idle { animation-delay: 1.5s; }
-    .float-card:nth-child(5).float-idle { animation-delay: 0.8s; }
-    .float-card:nth-child(6).float-idle { animation-delay: 0.3s; }
-
-    .float-card:hover { animation: none !important; }
-
-    /* Card inner overlay on hover */
-    .float-card .card-overlay {
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: linear-gradient(180deg, transparent 40%, rgba(119, 90, 25, 0.08) 100%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      z-index: 1;
-    }
-    .float-card:hover .card-overlay { opacity: 1; }
-
-    /* Tag badge */
-    .service-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 12px;
-      border-radius: 9999px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    /* Gold gradient button */
-    .btn-gold {
-      background: linear-gradient(135deg, #775a19 0%, #e0b96f 100%);
-      color: white;
-      font-weight: 700;
-      border: none;
-      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-    .btn-gold:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 12px 30px rgba(119, 90, 25, 0.3);
-    }
-
-    /* Glass nav */
-    .glass-nav {
-      background: rgba(250, 249, 246, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-
-    /* Hero gradient text */
-    .gradient-text {
-      background: linear-gradient(135deg, #775a19 0%, #e0b96f 60%, #a0825a 100%);
+    /* ── BRAND NAME ── */
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      background: linear-gradient(135deg, #775a19 0%, #e0b96f 55%, #a0825a 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    /* Section fade-in */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in {
-      animation: fadeInUp 0.7s cubic-bezier(0.23, 1, 0.32, 1) both;
-    }
-    .fade-in-1 { animation-delay: 0.1s; }
-    .fade-in-2 { animation-delay: 0.2s; }
-    .fade-in-3 { animation-delay: 0.3s; }
-    .fade-in-4 { animation-delay: 0.4s; }
-
-    /* Scrollbar hidden */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-    /* Ambient glow */
-    .ambient-glow {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: 0;
+    /* ── GLASS NAV ── */
+    .glass-nav {
+      background: rgba(250,249,246,0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
-    /* Hero image overlay */
-    .hero-img-wrap {
+    /* ── GOLD BUTTON ── */
+    .btn-gold {
+      background: linear-gradient(135deg, #775a19 0%, #e0b96f 100%);
+      color: white; font-weight: 700; border: none;
+      transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+    }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(119,90,25,0.3); }
+
+    /* ── GRADIENT TEXT ── */
+    .gradient-text {
+      background: linear-gradient(135deg, #775a19 0%, #e0b96f 60%, #a0825a 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ── HERO CAROUSEL ── */
+    .carousel-wrapper {
       position: relative;
       overflow: hidden;
       border-radius: 2rem;
+      aspect-ratio: 3/4;
     }
-    .hero-img-wrap img {
-      transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    .carousel-track {
+      display: flex;
+      transition: transform 0.55s cubic-bezier(0.77,0,0.175,1);
+      height: 100%;
     }
-    .hero-img-wrap:hover img {
-      transform: scale(1.04);
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      flex-shrink: 0;
     }
-
-    /* Stats counter */
-    .stat-item {
-      position: relative;
-      padding: 1.5rem;
-      background: white;
-      border-radius: 1rem;
-      box-shadow: 0 4px 20px rgba(26, 28, 26, 0.04);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .stat-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(119, 90, 25, 0.1);
-    }
-
-    /* Process step */
-    .process-step {
-      position: relative;
-    }
-    .process-step::after {
-      content: '';
+    .carousel-btn {
       position: absolute;
-      top: 28px;
-      left: -50%;
-      width: 100%;
-      height: 1px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(250,249,246,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(119,90,25,0.2);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 10;
+      color: #775a19;
+    }
+    .carousel-btn:hover { background: white; box-shadow: 0 4px 16px rgba(119,90,25,0.2); }
+    .carousel-btn.prev { right: 12px; }
+    .carousel-btn.next { left: 12px; }
+    .carousel-dots {
+      position: absolute; bottom: 14px;
+      left: 50%; transform: translateX(-50%);
+      display: flex; gap: 6px; z-index: 10;
+    }
+    .carousel-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .carousel-dot.active { width: 20px; border-radius: 3px; background: white; }
+
+    /* ── FLOATING SQUARES ── */
+    .float-card {
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s cubic-bezier(0.23,1,0.32,1);
+      will-change: transform, box-shadow;
+      cursor: pointer;
+    }
+    .float-card:hover {
+      transform: perspective(1000px) rotateX(-3deg) rotateY(3deg) translateZ(18px) translateY(-7px);
+      box-shadow: 16px 26px 50px rgba(119,90,25,0.13), 0 6px 20px rgba(26,28,26,0.07);
+    }
+    .float-card .card-shine {
+      position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(224,185,111,0.18) 0%, transparent 65%);
+      opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 2;
+    }
+    .float-card:hover .card-shine { opacity: 1; }
+
+    @keyframes floatUp { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+    .float-card { animation: floatUp 4s ease-in-out infinite; }
+    .float-card:nth-child(2){animation-delay:.6s} .float-card:nth-child(3){animation-delay:1.2s}
+    .float-card:nth-child(4){animation-delay:.3s} .float-card:nth-child(5){animation-delay:.9s}
+    .float-card:nth-child(6){animation-delay:1.5s}
+    .float-card:hover { animation: none !important; }
+
+    /* ── SERVICE TAG ── */
+    .service-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 9999px;
+      font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    }
+
+    /* ── STAT CARD ── */
+    .stat-item {
+      background: white; border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(26,28,26,0.04);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center; padding: 1.5rem;
+    }
+    .stat-item:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(119,90,25,0.1); }
+
+    /* ── PROCESS STEP ── */
+    .process-step::after {
+      content:''; position:absolute; top:28px; left:-50%; width:100%; height:1px;
       background: linear-gradient(90deg, transparent, #d2c4b9, transparent);
     }
-    .process-step:last-child::after { display: none; }
+    .process-step:last-child::after { display:none; }
+
+    /* ── AMBIENT GLOW ── */
+    .ambient { position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none; z-index:0; }
+
+    /* ── HERO IMAGE WRAP ── */
+    .hero-img-wrap { position:relative; overflow:hidden; border-radius:2rem; }
 
     /* Material symbols */
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
-    .filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+    .filled { font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24; }
+
+    /* Fade in */
+    @keyframes fadeInUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    .fade-in { animation: fadeInUp 0.7s cubic-bezier(0.23,1,0.32,1) both; }
+    .d1{animation-delay:.1s} .d2{animation-delay:.2s} .d3{animation-delay:.3s} .d4{animation-delay:.4s}
+
+    /* Scrollbar */
+    ::-webkit-scrollbar{width:5px} ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:rgba(119,90,25,0.15);border-radius:3px}
   </style>
 </head>
 <body>
 
-  <!-- ===== TOP NAVIGATION ===== -->
+  <!-- ══ NAV ══ -->
   <header class="fixed top-0 w-full z-50 glass-nav shadow-[0_2px_20px_rgba(26,28,26,0.04)]">
-    <nav class="flex flex-row-reverse justify-between items-center w-full px-6 md:px-10 py-4 max-w-7xl mx-auto">
-      <!-- Logo -->
-      <div class="flex flex-row-reverse items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center">
-          <span class="text-white text-sm">✦</span>
-        </div>
-        <span class="text-xl font-headline font-bold text-on-surface tracking-tight">סטודיו גבות</span>
-      </div>
-
-      <!-- Nav links -->
-      <div class="hidden md:flex flex-row-reverse items-center gap-8">
-        <a href="#" class="text-on-surface/60 hover:text-primary transition-colors text-sm font-medium">ראשי</a>
-        <a href="#categories" class="text-primary border-b-2 border-primary pb-0.5 text-sm font-medium">שירותים</a>
-        <a href="#process" class="text-on-surface/60 hover:text-primary transition-colors text-sm font-medium">תהליך</a>
-        <a href="#about" class="text-on-surface/60 hover:text-primary transition-colors text-sm font-medium">אודות</a>
-      </div>
-
-      <!-- CTA -->
-      <a href="booking.html" class="btn-gold px-5 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-primary/20">
-        הזמן תור
+    <nav class="flex flex-row-reverse justify-between items-center px-6 md:px-10 py-4 max-w-7xl mx-auto">
+      <!-- LOGO -->
+      <a href="#" class="flex items-center gap-2">
+        <span class="brand-name text-xl tracking-widest">BROW BEAUTY</span>
       </a>
+      <!-- Links -->
+      <div class="hidden md:flex flex-row-reverse items-center gap-8 text-sm">
+        <a href="#" class="text-on-surface/60 hover:text-primary transition-colors">ראשי</a>
+        <a href="#categories" class="text-primary border-b-2 border-primary pb-0.5">שירותים</a>
+        <a href="#process" class="text-on-surface/60 hover:text-primary transition-colors">תהליך</a>
+        <a href="#about" class="text-on-surface/60 hover:text-primary transition-colors">אודות</a>
+        <a href="admin.html" class="text-on-surface/40 hover:text-primary transition-colors text-xs">Admin</a>
+      </div>
+      <!-- CTA -->
+      <a href="booking.html" class="btn-gold px-5 py-2.5 rounded-full text-sm shadow-lg shadow-primary/20">הזמן תור</a>
     </nav>
   </header>
 
-  <!-- ===== HERO SECTION ===== -->
+  <!-- ══ HERO ══ -->
   <section class="relative min-h-screen flex items-center pt-24 overflow-hidden">
-    <!-- Ambient glows -->
-    <div class="ambient-glow w-96 h-96 bg-primary-fixed opacity-30 top-20 -right-20"></div>
-    <div class="ambient-glow w-64 h-64 bg-tertiary-container opacity-20 bottom-32 left-10"></div>
+    <div class="ambient w-96 h-96 bg-primary-fixed opacity-25 top-16 right-0"></div>
+    <div class="ambient w-64 h-64 bg-tertiary-container opacity-20 bottom-32 left-10"></div>
 
-    <div class="max-w-7xl mx-auto px-6 md:px-10 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-      <!-- Text -->
-      <div class="relative z-10 fade-in fade-in-1">
-        <div class="inline-flex items-center gap-2 px-4 py-2 bg-secondary-container rounded-full mb-8">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 w-full grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+
+      <!-- Text — centered -->
+      <div class="relative z-10 text-center lg:text-right fade-in d1">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-secondary-container rounded-full mb-8 mx-auto">
           <span class="material-symbols-outlined text-primary text-base filled">auto_awesome</span>
           <span class="text-xs font-bold tracking-widest text-primary uppercase">סטודיו מקצועי לעיצוב גבות</span>
         </div>
 
-        <h1 class="text-6xl md:text-7xl font-headline font-extrabold tracking-tighter text-on-surface leading-none mb-6">
+        <h1 class="text-6xl md:text-7xl font-display font-black tracking-tight text-on-surface leading-none mb-6">
           גבות<br />
           <span class="gradient-text">מושלמות.</span><br />
           <span class="text-4xl md:text-5xl font-light text-outline">עיצוב מדויק.</span>
         </h1>
 
-        <p class="text-on-surface-variant text-lg leading-relaxed max-w-md mb-10">
+        <p class="text-on-surface-variant text-lg leading-relaxed max-w-md mb-10 mx-auto lg:mx-0 lg:mr-auto lg:ml-0" style="margin-right:auto;margin-left:0">
           אנו מאמינות שגבות מעוצבות כראוי משנות את כל המראה. הגישה שלנו — מדויקת, אישית, ועם עין לפרטים.
         </p>
 
-        <div class="flex flex-row-reverse gap-4 items-center">
-          <a href="booking.html" class="btn-gold px-8 py-4 rounded-full text-base font-bold shadow-xl shadow-primary/25">
-            קביעת תור עכשיו
-          </a>
+        <div class="flex flex-row-reverse gap-4 items-center justify-center lg:justify-end">
+          <a href="booking.html" class="btn-gold px-8 py-4 rounded-full text-base shadow-xl shadow-primary/25">קביעת תור עכשיו</a>
           <a href="#categories" class="flex items-center gap-2 text-on-surface/70 hover:text-primary transition-colors font-medium group">
             <span>הצג שירותים</span>
-            <span class="material-symbols-outlined text-xl group-hover:translate-x-[-4px] transition-transform">arrow_right_alt</span>
+            <span class="material-symbols-outlined text-xl group-hover:-translate-x-1 transition-transform">arrow_right_alt</span>
           </a>
         </div>
       </div>
 
-      <!-- Hero image -->
-      <div class="relative fade-in fade-in-2">
-        <div class="hero-img-wrap aspect-[4/5] max-w-sm mx-auto lg:mx-0 lg:ml-auto">
-          <img
-            src="https://images.unsplash.com/photo-1588528402605-1f8e39b8a79d?w=600&q=80"
-            alt="עיצוב גבות מקצועי"
-            class="w-full h-full object-cover"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent"></div>
-        </div>
-
-        <!-- Floating badge -->
-        <div class="absolute bottom-8 -left-4 bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-xl shadow-primary/10 fade-in fade-in-3">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center">
-              <span class="material-symbols-outlined text-white text-base filled">star</span>
+      <!-- CAROUSEL -->
+      <div class="relative fade-in d2 flex justify-center">
+        <div class="w-full max-w-sm mx-auto">
+          <div class="carousel-wrapper shadow-2xl shadow-primary/15">
+            <div class="carousel-track" id="heroTrack">
+              <img class="carousel-slide" src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=600&q=85&fit=crop&crop=faces" alt="גבות 1" />
+              <img class="carousel-slide" src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=85&fit=crop&crop=faces" alt="גבות 2" />
+              <img class="carousel-slide" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=85&fit=crop&crop=faces" alt="גבות 3" />
+              <img class="carousel-slide" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=85&fit=crop&crop=faces" alt="גבות 4" />
+              <img class="carousel-slide" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=85&fit=crop&crop=faces" alt="גבות 5" />
+              <img class="carousel-slide" src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=85&fit=crop&crop=faces" alt="גבות 6" />
+              <img class="carousel-slide" src="https://images.unsplash.com/photo-1526510747491-58f928ec870f?w=600&q=85&fit=crop&crop=faces" alt="גבות 7" />
+              <img class="carousel-slide" src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=600&q=85&fit=crop&crop=faces" alt="גבות 8" />
+              <img class="carousel-slide" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=85&fit=crop&crop=faces" alt="גבות 9" />
+              <img class="carousel-slide" src="https://images.unsplash.com/photo-1488716820095-cbe80883c496?w=600&q=85&fit=crop&crop=faces" alt="גבות 10" />
             </div>
-            <div>
-              <p class="text-xs text-outline">דירוג לקוחות</p>
-              <p class="text-on-surface font-bold text-lg leading-none">4.9 ★</p>
+
+            <!-- Arrows -->
+            <button class="carousel-btn prev" id="heroPrev" aria-label="הקודם">
+              <span class="material-symbols-outlined text-lg">chevron_right</span>
+            </button>
+            <button class="carousel-btn next" id="heroNext" aria-label="הבא">
+              <span class="material-symbols-outlined text-lg">chevron_left</span>
+            </button>
+
+            <!-- Dots -->
+            <div class="carousel-dots" id="heroDots"></div>
+
+            <!-- Gradient overlay bottom — לא מכסה את הפנים -->
+            <div class="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-b-[2rem]"></div>
+          </div>
+
+          <!-- Floating badges -->
+          <div class="absolute bottom-8 -left-4 bg-white/92 backdrop-blur-md rounded-2xl p-4 shadow-xl shadow-primary/10 fade-in d3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-white text-base filled">star</span>
+              </div>
+              <div>
+                <p class="text-xs text-outline">דירוג לקוחות</p>
+                <p class="text-on-surface font-bold text-lg leading-none">4.9 ★</p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Floating stats -->
-        <div class="absolute top-8 -right-4 bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-xl shadow-primary/10 fade-in fade-in-4">
-          <p class="text-xs text-outline mb-1">לקוחות מרוצות</p>
-          <p class="text-2xl font-headline font-extrabold text-primary">2,400+</p>
+          <div class="absolute top-6 -right-4 bg-white/92 backdrop-blur-md rounded-2xl p-4 shadow-xl shadow-primary/10 fade-in d4">
+            <p class="text-xs text-outline mb-1">לקוחות מרוצות</p>
+            <p class="text-2xl font-display font-black text-primary">450+</p>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 right-1/2 translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
-      <span class="text-xs text-outline">גלול למטה</span>
-      <div class="w-0.5 h-8 bg-outline/30 rounded-full overflow-hidden">
-        <div class="w-full h-1/2 bg-primary rounded-full animate-bounce"></div>
       </div>
     </div>
   </section>
 
-  <!-- ===== STATS BAR ===== -->
-  <section class="bg-surface-container-low py-12 px-6 md:px-10">
+  <!-- ══ STATS ══ -->
+  <section class="bg-surface-container-low py-12 px-6">
     <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="stat-item text-center">
-        <p class="text-3xl font-headline font-extrabold gradient-text mb-1">8+</p>
-        <p class="text-sm text-outline font-medium">שנות ניסיון</p>
+      <div class="stat-item">
+        <p class="text-3xl font-display font-black gradient-text mb-1">8+</p>
+        <p class="text-sm text-outline">שנות ניסיון</p>
       </div>
-      <div class="stat-item text-center">
-        <p class="text-3xl font-headline font-extrabold gradient-text mb-1">2,400+</p>
-        <p class="text-sm text-outline font-medium">לקוחות מרוצות</p>
+      <div class="stat-item">
+        <p class="text-3xl font-display font-black gradient-text mb-1">450+</p>
+        <p class="text-sm text-outline">לקוחות מרוצות</p>
       </div>
-      <div class="stat-item text-center">
-        <p class="text-3xl font-headline font-extrabold gradient-text mb-1">6</p>
-        <p class="text-sm text-outline font-medium">סוגי טיפולים</p>
+      <div class="stat-item">
+        <p class="text-3xl font-display font-black gradient-text mb-1">6</p>
+        <p class="text-sm text-outline">סוגי טיפולים</p>
       </div>
-      <div class="stat-item text-center">
-        <p class="text-3xl font-headline font-extrabold gradient-text mb-1">100%</p>
-        <p class="text-sm text-outline font-medium">שביעות רצון</p>
+      <div class="stat-item">
+        <p class="text-3xl font-display font-black gradient-text mb-1">100%</p>
+        <p class="text-sm text-outline">שביעות רצון</p>
       </div>
     </div>
   </section>
 
-  <!-- ===== FLOATING SQUARES — CATEGORIES ===== -->
+  <!-- ══ CATEGORIES — FLOATING SQUARES ══ -->
   <section id="categories" class="py-24 px-6 md:px-10 relative overflow-hidden">
-    <div class="ambient-glow w-80 h-80 bg-secondary-container opacity-40 top-0 left-1/4"></div>
+    <div class="ambient w-80 h-80 bg-secondary-container opacity-35 top-0 right-1/4"></div>
 
     <div class="max-w-7xl mx-auto">
-      <!-- Section header -->
+      <!-- Header — centered -->
       <div class="text-center mb-16">
-        <span class="service-tag bg-secondary-container text-primary mb-4">שירותי הסטודיו</span>
-        <h2 class="text-5xl font-headline font-extrabold tracking-tighter text-on-surface mb-4">
+        <span class="service-tag bg-secondary-container text-primary mb-4 inline-flex">שירותי הסטודיו</span>
+        <h2 class="text-5xl font-display font-black tracking-tight text-on-surface mb-4">
           בחרי את הטיפול<br /><span class="gradient-text">שלך</span>
         </h2>
         <p class="text-on-surface-variant max-w-md mx-auto leading-relaxed">
-          כל טיפול מתוכנן בקפידה כדי להבליט את היופי הטבעי שלך עם תוצאות שמחזיקות לאורך זמן.
+          כל טיפול מתוכנן בקפידה להבליט את היופי הטבעי שלך עם תוצאות שמחזיקות לאורך זמן.
         </p>
       </div>
 
-      <!-- FLOATING SQUARES GRID -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10" id="servicesGrid">
+      <!-- GRID -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
 
-        <!-- Card 1: עיצוב גבות -->
-        <div class="float-card float-idle bg-surface-container-lowest rounded-2xl overflow-hidden group" data-href="booking.html?service=shaping">
+        <!-- 1: עיצוב גבות -->
+        <div class="float-card bg-surface-container-lowest rounded-2xl overflow-hidden group relative" data-href="booking.html?service=shaping">
           <div class="card-shine"></div>
-          <div class="card-overlay"></div>
-
-          <div class="relative overflow-hidden aspect-[4/3]">
-            <img
-              src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=600&q=80"
-              alt="עיצוב גבות"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-on-surface/20 to-transparent"></div>
+          <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=85&fit=crop&crop=faces,top" alt="עיצוב גבות"
+              class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent"></div>
             <span class="absolute top-4 right-4 service-tag bg-white/90 backdrop-blur-sm text-primary shadow-sm">
-              <span class="material-symbols-outlined text-xs filled">auto_fix_high</span>
-              הכי פופולרי
+              <span class="material-symbols-outlined text-xs filled">auto_fix_high</span> הכי פופולרי
             </span>
           </div>
-
           <div class="p-6 relative z-10">
             <div class="flex items-start justify-between mb-3">
               <div>
-                <h3 class="text-xl font-headline font-bold text-on-surface">עיצוב גבות</h3>
+                <h3 class="text-xl font-display font-bold text-on-surface">עיצוב גבות</h3>
                 <p class="text-sm text-outline mt-1">ניפוח, עיצוב ועיגול מדויק</p>
               </div>
-              <div class="text-right">
-                <span class="block text-2xl font-headline font-extrabold text-primary">₪120</span>
+              <div class="text-left">
+                <span class="block text-2xl font-display font-black text-primary">₪120</span>
                 <span class="text-[10px] font-bold tracking-widest text-outline uppercase">45 דק׳</span>
               </div>
             </div>
-            <a href="booking.html?service=shaping" class="mt-4 w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-surface-container-low text-primary font-bold text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
-              <span>לקביעת תור</span>
-              <span class="material-symbols-outlined text-base">arrow_back</span>
+            <a href="booking.html?service=shaping" class="mt-2 w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-surface-container-low text-primary font-bold text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              לקביעת תור <span class="material-symbols-outlined text-base">arrow_back</span>
             </a>
           </div>
         </div>
 
-        <!-- Card 2: מיקרובליידינג (featured - larger) -->
-        <div class="float-card float-idle bg-surface-container-lowest rounded-2xl overflow-hidden group sm:row-span-1 lg:col-span-1 relative" data-href="booking.html?service=microblading">
+        <!-- 2: מיקרובליידינג -->
+        <div class="float-card bg-surface-container-lowest rounded-2xl overflow-hidden group relative" data-href="booking.html?service=microblading">
           <div class="card-shine"></div>
-          <div class="card-overlay"></div>
-
           <div class="absolute top-4 left-4 z-20">
-            <span class="service-tag bg-gradient-to-r from-primary to-primary-container text-white shadow-lg">
-              ✦ מומלץ
-            </span>
+            <span class="service-tag bg-gradient-to-r from-primary to-primary-container text-white shadow-lg">✦ מומלץ</span>
           </div>
-
-          <div class="relative overflow-hidden aspect-[4/3]">
-            <img
-              src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&q=80"
-              alt="מיקרובליידינג"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent"></div>
+          <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+            <img src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=600&q=85&fit=crop&crop=faces,top" alt="מיקרובליידינג"
+              class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent"></div>
           </div>
-
           <div class="p-6 relative z-10">
             <div class="flex items-start justify-between mb-3">
               <div>
-                <h3 class="text-xl font-headline font-bold text-on-surface">מיקרובליידינג</h3>
+                <h3 class="text-xl font-display font-bold text-on-surface">מיקרובליידינג</h3>
                 <p class="text-sm text-outline mt-1">גבות טבעיות לשנה ומעלה</p>
               </div>
-              <div class="text-right">
-                <span class="block text-2xl font-headline font-extrabold text-primary">₪1,200</span>
+              <div class="text-left">
+                <span class="block text-2xl font-display font-black text-primary">₪1,200</span>
                 <span class="text-[10px] font-bold tracking-widest text-outline uppercase">90 דק׳</span>
               </div>
             </div>
-            <a href="booking.html?service=microblading" class="mt-4 w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-surface-container-low text-primary font-bold text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
-              <span>לקביעת תור</span>
-              <span class="material-symbols-outlined text-base">arrow_back</span>
+            <a href="booking.html?service=microblading" class="mt-2 w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-surface-container-low text-primary font-bold text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              לקביעת תור <span class="material-symbols-outlined text-base">arrow_back</span>
             </a>
           </div>
         </div>
 
-        <!-- Card 3: הידרציה -->
-        <div class="float-card float-idle bg-surface-container-lowest rounded-2xl overflow-hidden group" data-href="booking.html?service=hydration">
+        <!-- 3: גבות+שפם -->
+        <div class="float-card bg-surface-container-lowest rounded-2xl overflow-hidden group relative" data-href="booking.html?service=brow-mustache">
           <div class="card-shine"></div>
-          <div class="card-overlay"></div>
-
-          <div class="relative overflow-hidden aspect-[4/3]">
-            <img
-              src="https://images.unsplash.com/photo-1560750133-2d5c6a865651?w=600&q=80"
-              alt="טיפול הידרציה"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-on-surface/20 to-transparent"></div>
-            <span class="absolute top-4 right-4 service-tag bg-tertiary-container/90 backdrop-blur-sm text-tertiary shadow-sm">
-              חדש
-            </span>
+          <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=85&fit=crop&crop=faces,top" alt="גבות ושפם"
+              class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent"></div>
+            <span class="absolute top-4 right-4 service-tag bg-tertiary-container/90 backdrop-blur-sm text-tertiary shadow-sm">חדש</span>
           </div>
-
           <div class="p-6 relative z-10">
             <div class="flex items-start justify-between mb-3">
               <div>
-                <h3 class="text-xl font-headline font-bold text-on-surface">הידרציה וטיפוח</h3>
-                <p class="text-sm text-outline mt-1">טיפול מזין לגבות דלילות</p>
+                <h3 class="text-xl font-display font-bold text-on-surface">גבות + שפם</h3>
+                <p class="text-sm text-outline mt-1">עיצוב גבות ושפם יחד</p>
               </div>
-              <div class="text-right">
-                <span class="block text-2xl font-headline font-extrabold text-primary">₪180</span>
+              <div class="text-left">
+                <span class="block text-2xl font-display font-black text-primary">₪180</span>
                 <span class="text-[10px] font-bold tracking-widest text-outline uppercase">60 דק׳</span>
               </div>
             </div>
-            <a href="booking.html?service=hydration" class="mt-4 w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-surface-container-low text-primary font-bold text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
-              <span>לקביעת תור</span>
-              <span class="material-symbols-outlined text-base">arrow_back</span>
+            <a href="booking.html?service=brow-mustache" class="mt-2 w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-surface-container-low text-primary font-bold text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              לקביעת תור <span class="material-symbols-outlined text-base">arrow_back</span>
             </a>
           </div>
         </div>
 
-        <!-- Card 4: צביעה -->
-        <div class="float-card float-idle bg-surface-container-lowest rounded-2xl overflow-hidden group" data-href="booking.html?service=coloring">
+        <!-- 4: צביעת גבות -->
+        <div class="float-card bg-surface-container-lowest rounded-2xl overflow-hidden group relative" data-href="booking.html?service=coloring">
           <div class="card-shine"></div>
-          <div class="card-overlay"></div>
-
-          <div class="relative overflow-hidden aspect-[4/3]">
-            <img
-              src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80"
-              alt="צביעת גבות"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-on-surface/20 to-transparent"></div>
+          <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+            <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=85&fit=crop&crop=faces,top" alt="צביעת גבות"
+              class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent"></div>
           </div>
-
           <div class="p-6 relative z-10">
             <div class="flex items-start justify-between mb-3">
               <div>
-                <h3 class="text-xl font-headline font-bold text-on-surface">צביעת גבות</h3>
+                <h3 class="text-xl font-display font-bold text-on-surface">צביעת גבות</h3>
                 <p class="text-sm text-outline mt-1">הבהרה, כהה, או גוון טבעי</p>
               </div>
-              <div class="text-right">
-                <span class="block text-2xl font-headline font-extrabold text-primary">₪80</span>
+              <div class="text-left">
+                <span class="block text-2xl font-display font-black text-primary">₪80</span>
                 <span class="text-[10px] font-bold tracking-widest text-outline uppercase">30 דק׳</span>
               </div>
             </div>
-            <a href="booking.html?service=coloring" class="mt-4 w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-surface-container-low text-primary font-bold text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
-              <span>לקביעת תור</span>
-              <span class="material-symbols-outlined text-base">arrow_back</span>
+            <a href="booking.html?service=coloring" class="mt-2 w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-surface-container-low text-primary font-bold text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              לקביעת תור <span class="material-symbols-outlined text-base">arrow_back</span>
             </a>
           </div>
         </div>
 
-        <!-- Card 5: פאודר ברוז -->
-        <div class="float-card float-idle bg-surface-container-lowest rounded-2xl overflow-hidden group" data-href="booking.html?service=powder">
+        <!-- 5: שעווה בפנים -->
+        <div class="float-card bg-surface-container-lowest rounded-2xl overflow-hidden group relative" data-href="booking.html?service=wax">
           <div class="card-shine"></div>
-          <div class="card-overlay"></div>
-
-          <div class="relative overflow-hidden aspect-[4/3]">
-            <img
-              src="https://images.unsplash.com/photo-1607748862156-7c548e7e98f4?w=600&q=80"
-              alt="פאודר ברוז"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-on-surface/20 to-transparent"></div>
-            <span class="absolute top-4 right-4 service-tag bg-secondary-container/90 backdrop-blur-sm text-primary shadow-sm">
-              פרמיום
-            </span>
+          <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+            <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=85&fit=crop&crop=faces,top" alt="שעווה בפנים"
+              class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent"></div>
+            <span class="absolute top-4 right-4 service-tag bg-secondary-container/90 backdrop-blur-sm text-primary shadow-sm">פופולרי</span>
           </div>
-
           <div class="p-6 relative z-10">
             <div class="flex items-start justify-between mb-3">
               <div>
-                <h3 class="text-xl font-headline font-bold text-on-surface">פאודר ברוז</h3>
-                <p class="text-sm text-outline mt-1">מראה מאופר ומושלם לשנתיים</p>
+                <h3 class="text-xl font-display font-bold text-on-surface">שעווה בפנים</h3>
+                <p class="text-sm text-outline mt-1">הסרת שיער בשעווה — עדין וטבעי</p>
               </div>
-              <div class="text-right">
-                <span class="block text-2xl font-headline font-extrabold text-primary">₪1,500</span>
-                <span class="text-[10px] font-bold tracking-widest text-outline uppercase">120 דק׳</span>
+              <div class="text-left">
+                <span class="block text-2xl font-display font-black text-primary">₪250</span>
+                <span class="text-[10px] font-bold tracking-widest text-outline uppercase">45 דק׳</span>
               </div>
             </div>
-            <a href="booking.html?service=powder" class="mt-4 w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-surface-container-low text-primary font-bold text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
-              <span>לקביעת תור</span>
-              <span class="material-symbols-outlined text-base">arrow_back</span>
+            <a href="booking.html?service=wax" class="mt-2 w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-surface-container-low text-primary font-bold text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              לקביעת תור <span class="material-symbols-outlined text-base">arrow_back</span>
             </a>
           </div>
         </div>
 
-        <!-- Card 6: חבילת VIP -->
-        <div class="float-card float-idle bg-gradient-to-br from-primary to-on-primary-container rounded-2xl overflow-hidden group relative" data-href="booking.html?service=vip">
+        <!-- 6: החבילה המשתלמת (VIP) -->
+        <div class="float-card bg-gradient-to-br from-primary to-on-primary-container rounded-2xl overflow-hidden group relative" data-href="booking.html?service=vip">
           <div class="card-shine"></div>
-
-          <div class="p-8 h-full flex flex-col justify-between min-h-[280px] relative z-10">
+          <div class="p-8 flex flex-col justify-between min-h-[320px] relative z-10">
             <div>
-              <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-6">
+              <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-5">
                 <span class="material-symbols-outlined text-white text-2xl filled">workspace_premium</span>
               </div>
-              <h3 class="text-2xl font-headline font-bold text-white mb-2">חבילת VIP</h3>
-              <p class="text-white/80 text-sm leading-relaxed">
-                שילוב מושלם של עיצוב, צביעה, הידרציה ועיסוי — חוויה מלאה ב-VIP.
-              </p>
+              <h3 class="text-2xl font-display font-bold text-white mb-2">החבילה המשתלמת</h3>
+              <p class="text-white/80 text-sm leading-relaxed">גבות + שפם + צביעת גבות — כל מה שצריך בחבילה אחת.</p>
             </div>
-
             <div>
               <div class="flex items-end justify-between mb-4">
                 <div>
-                  <span class="text-white/60 text-xs line-through">₪450</span>
-                  <span class="block text-3xl font-headline font-extrabold text-white">₪320</span>
+                  <span class="text-white/50 text-xs line-through">₪380</span>
+                  <span class="block text-3xl font-display font-black text-white">₪320</span>
                 </div>
-                <span class="service-tag bg-white/20 text-white">120 דק׳</span>
               </div>
               <a href="booking.html?service=vip" class="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-white text-primary font-bold text-sm hover:bg-primary-fixed transition-colors duration-300">
-                <span>לקביעת תור</span>
-                <span class="material-symbols-outlined text-base">arrow_back</span>
+                לקביעת תור <span class="material-symbols-outlined text-base">arrow_back</span>
               </a>
             </div>
           </div>
-
-          <!-- Decorative circles -->
           <div class="absolute top-0 left-0 w-48 h-48 rounded-full bg-white/5 -translate-x-1/2 -translate-y-1/2"></div>
           <div class="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-white/5 translate-x-1/4 translate-y-1/4"></div>
         </div>
 
-      </div><!-- end grid -->
+      </div>
     </div>
   </section>
 
-  <!-- ===== HOW IT WORKS ===== -->
+  <!-- ══ PROCESS ══ -->
   <section id="process" class="py-24 px-6 md:px-10 bg-surface-container-low">
     <div class="max-w-5xl mx-auto">
       <div class="text-center mb-16">
-        <span class="service-tag bg-secondary-container text-primary mb-4">איך זה עובד</span>
-        <h2 class="text-4xl font-headline font-extrabold tracking-tighter text-on-surface">
+        <span class="service-tag bg-secondary-container text-primary mb-4 inline-flex">איך זה עובד</span>
+        <h2 class="text-4xl font-display font-black tracking-tight text-on-surface">
           שלושה צעדים<br /><span class="gradient-text">לגבות המושלמות</span>
         </h2>
       </div>
-
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="text-center process-step">
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary/25">
+        <div class="text-center process-step relative">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center mx-auto mb-5 shadow-lg shadow-primary/25">
             <span class="material-symbols-outlined text-white text-2xl">calendar_month</span>
           </div>
-          <div class="w-8 h-8 rounded-full bg-surface-container-lowest border-2 border-outline-variant flex items-center justify-center mx-auto mb-4 text-primary font-bold text-sm">1</div>
-          <h3 class="text-lg font-headline font-bold text-on-surface mb-2">בחרי שירות ותאריך</h3>
-          <p class="text-sm text-outline leading-relaxed">בחרי מתוך מגוון טיפולינו את מה שמתאים לך ביותר, ובחרי תאריך ושעה נוחים.</p>
+          <div class="w-7 h-7 rounded-full bg-white border-2 border-outline-variant flex items-center justify-center mx-auto mb-3 text-primary font-bold text-xs">1</div>
+          <h3 class="text-lg font-display font-bold text-on-surface mb-2">בחרי שירות ותאריך</h3>
+          <p class="text-sm text-outline leading-relaxed">בחרי מתוך מגוון הטיפולים את מה שמתאים לך ביותר.</p>
         </div>
-
-        <div class="text-center process-step">
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-tertiary to-tertiary-container flex items-center justify-center mx-auto mb-6 shadow-lg shadow-tertiary/25">
+        <div class="text-center process-step relative">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-tertiary to-tertiary-container flex items-center justify-center mx-auto mb-5 shadow-lg shadow-tertiary/25">
             <span class="material-symbols-outlined text-white text-2xl">person_search</span>
           </div>
-          <div class="w-8 h-8 rounded-full bg-surface-container-lowest border-2 border-outline-variant flex items-center justify-center mx-auto mb-4 text-primary font-bold text-sm">2</div>
-          <h3 class="text-lg font-headline font-bold text-on-surface mb-2">ייעוץ אישי</h3>
-          <p class="text-sm text-outline leading-relaxed">הגיעי לסטודיו — נעשה ייעוץ קצר על צורת הפנים ומה הכי ישרת אותך.</p>
+          <div class="w-7 h-7 rounded-full bg-white border-2 border-outline-variant flex items-center justify-center mx-auto mb-3 text-primary font-bold text-xs">2</div>
+          <h3 class="text-lg font-display font-bold text-on-surface mb-2">ייעוץ אישי</h3>
+          <p class="text-sm text-outline leading-relaxed">נעשה ייעוץ קצר על צורת הפנים ומה הכי ישרת אותך.</p>
         </div>
-
-        <div class="text-center">
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-secondary to-secondary-container flex items-center justify-center mx-auto mb-6 shadow-lg shadow-secondary/25">
+        <div class="text-center relative">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-secondary to-secondary-container flex items-center justify-center mx-auto mb-5 shadow-lg shadow-secondary/25">
             <span class="material-symbols-outlined text-white text-2xl">auto_fix_high</span>
           </div>
-          <div class="w-8 h-8 rounded-full bg-surface-container-lowest border-2 border-outline-variant flex items-center justify-center mx-auto mb-4 text-primary font-bold text-sm">3</div>
-          <h3 class="text-lg font-headline font-bold text-on-surface mb-2">תוצאה מדהימה</h3>
-          <p class="text-sm text-outline leading-relaxed">צאי עם גבות מושלמות שמשדרגות את כל המראה. הנחיות לתחזוקה כלולות בטיפול.</p>
+          <div class="w-7 h-7 rounded-full bg-white border-2 border-outline-variant flex items-center justify-center mx-auto mb-3 text-primary font-bold text-xs">3</div>
+          <h3 class="text-lg font-display font-bold text-on-surface mb-2">תוצאה מדהימה</h3>
+          <p class="text-sm text-outline leading-relaxed">צאי עם גבות מושלמות שמשדרגות את כל המראה.</p>
         </div>
       </div>
-
       <div class="text-center mt-12">
-        <a href="booking.html" class="btn-gold px-10 py-4 rounded-full text-base font-bold shadow-xl shadow-primary/25 inline-flex items-center gap-3">
+        <a href="booking.html" class="btn-gold px-10 py-4 rounded-full text-base shadow-xl shadow-primary/25 inline-flex items-center gap-3">
           <span class="material-symbols-outlined">calendar_add_on</span>
           קביעת תור עכשיו — חינם
         </a>
@@ -663,17 +553,13 @@
     </div>
   </section>
 
-  <!-- ===== ABOUT SECTION ===== -->
+  <!-- ══ ABOUT ══ -->
   <section id="about" class="py-24 px-6 md:px-10">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
       <div class="relative">
         <div class="hero-img-wrap aspect-square max-w-md">
-          <img
-            src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80"
-            alt="הסטודיו שלנו"
-            class="w-full h-full object-cover"
-          />
-          <div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent mix-blend-multiply"></div>
+          <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80&fit=crop&crop=faces,top"
+            alt="הסטודיו שלנו" class="w-full h-full object-cover object-top" />
         </div>
         <div class="absolute -bottom-4 -left-4 bg-white rounded-2xl p-5 shadow-xl shadow-primary/10">
           <div class="flex items-center gap-3">
@@ -685,121 +571,129 @@
           </div>
         </div>
       </div>
-
-      <div>
-        <span class="service-tag bg-secondary-container text-primary mb-6 inline-flex">אודות הסטודיו</span>
-        <h2 class="text-4xl font-headline font-extrabold tracking-tighter text-on-surface mb-6">
+      <div class="text-center lg:text-right">
+        <span class="service-tag bg-secondary-container text-primary mb-5 inline-flex">אודות הסטודיו</span>
+        <h2 class="text-4xl font-display font-black tracking-tight text-on-surface mb-5">
           האמנות של<br /><span class="gradient-text">גבות מושלמות</span>
         </h2>
         <p class="text-on-surface-variant leading-relaxed mb-6">
           אנו מאמינות שכל פנים הן ייחודיות, וכל גבה צריכה להתאים לצורת הפנים, לצבע העיניים, ולסגנון האישי.
-          בסטודיו שלנו נקבל אותך עם גישה מקצועית, חמה, ועם עין ביקורתית לפרטים.
         </p>
-        <div class="space-y-4">
-          <div class="flex items-center gap-3">
+        <div class="space-y-3 text-right">
+          <div class="flex items-center gap-3 justify-center lg:justify-end">
+            <span class="text-on-surface-variant">ציוד סטרילי ואיכות גבוהה</span>
             <div class="w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center flex-shrink-0">
               <span class="material-symbols-outlined text-primary text-sm filled">check</span>
             </div>
-            <span class="text-on-surface-variant">ציוד סטרילי ומחומר איכות גבוהה</span>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center flex-shrink-0">
-              <span class="material-symbols-outlined text-primary text-sm filled">check</span>
-            </div>
+          <div class="flex items-center gap-3 justify-center lg:justify-end">
             <span class="text-on-surface-variant">ייעוץ אישי לפני כל טיפול</span>
-          </div>
-          <div class="flex items-center gap-3">
             <div class="w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center flex-shrink-0">
               <span class="material-symbols-outlined text-primary text-sm filled">check</span>
             </div>
-            <span class="text-on-surface-variant">הנחיות תחזוקה מפורטות לאחר הטיפול</span>
+          </div>
+          <div class="flex items-center gap-3 justify-center lg:justify-end">
+            <span class="text-on-surface-variant">הנחיות תחזוקה מפורטות</span>
+            <div class="w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-primary text-sm filled">check</span>
+            </div>
           </div>
         </div>
-        <a href="booking.html" class="mt-8 inline-flex btn-gold px-8 py-4 rounded-full text-base font-bold shadow-lg shadow-primary/20">
-          קביעת תור
-        </a>
+        <div class="mt-8 flex justify-center lg:justify-end">
+          <a href="booking.html" class="btn-gold px-8 py-4 rounded-full text-base shadow-lg shadow-primary/20">קביעת תור</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="bg-surface-container-low py-12 px-6 md:px-10 border-t border-outline-variant/20">
+  <!-- ══ FOOTER ══ -->
+  <footer class="bg-surface-container-low py-12 px-6 border-t border-outline-variant/20">
     <div class="max-w-7xl mx-auto">
-      <div class="flex flex-col md:flex-row-reverse justify-between items-center gap-8 mb-8">
-        <div class="flex flex-row-reverse items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center">
-            <span class="text-white text-sm">✦</span>
-          </div>
-          <span class="text-xl font-headline font-bold text-on-surface">סטודיו גבות</span>
-        </div>
+      <div class="flex flex-col md:flex-row-reverse justify-between items-center gap-6 mb-6">
+        <span class="brand-name text-2xl tracking-widest">BROW BEAUTY</span>
         <div class="flex gap-8">
           <a href="#" class="text-outline hover:text-primary transition-colors text-sm">מדיניות פרטיות</a>
           <a href="#" class="text-outline hover:text-primary transition-colors text-sm">תנאי שימוש</a>
           <a href="#" class="text-outline hover:text-primary transition-colors text-sm">צרי קשר</a>
         </div>
-        <p class="text-outline text-sm">© 2024 סטודיו גבות. כל הזכויות שמורות.</p>
+        <p class="text-outline text-sm">© 2024 BROW BEAUTY. כל הזכויות שמורות.</p>
       </div>
     </div>
   </footer>
 
-  <!-- ===== JAVASCRIPT: 3D Tilt + Mouse Shine ===== -->
+  <!-- ══ JS ══ -->
   <script>
-    // 3D magnetic tilt effect on float cards
+    // ── CAROUSEL ──
+    const track = document.getElementById('heroTrack');
+    const slides = track.querySelectorAll('.carousel-slide');
+    const dotsContainer = document.getElementById('heroDots');
+    let current = 0;
+    const total = slides.length;
+
+    // Build dots
+    slides.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(d);
+    });
+
+    function goTo(n) {
+      current = (n + total) % total;
+      track.style.transform = `translateX(${current * 100}%)`;
+      document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    document.getElementById('heroPrev').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('heroNext').addEventListener('click', () => goTo(current + 1));
+
+    // Swipe support
+    let touchStartX = 0;
+    track.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX, { passive: true });
+    track.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+    });
+
+    // ── FLOAT CARD 3D TILT ──
     document.querySelectorAll('.float-card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const cx = rect.width / 2;
-        const cy = rect.height / 2;
-        const rotX = ((y - cy) / cy) * -6;
-        const rotY = ((x - cx) / cx) * 8;
-        const pctX = (x / rect.width) * 100;
-        const pctY = (y / rect.height) * 100;
-
-        card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(24px) translateY(-10px)`;
-        card.style.setProperty('--mouse-x', `${pctX}%`);
-        card.style.setProperty('--mouse-y', `${pctY}%`);
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = e.clientX - r.left, y = e.clientY - r.top;
+        const rx = ((y - r.height/2) / r.height) * -6;
+        const ry = ((x - r.width/2) / r.width) * 8;
+        card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(22px) translateY(-8px)`;
+        card.style.setProperty('--mx', `${(x/r.width)*100}%`);
+        card.style.setProperty('--my', `${(y/r.height)*100}%`);
       });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
-      });
-
-      // Navigate on click (if data-href is set)
-      card.addEventListener('click', (e) => {
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+      card.addEventListener('click', e => {
         const href = card.dataset.href;
-        if (href && !e.target.closest('a')) {
-          window.location.href = href;
-        }
+        if (href && !e.target.closest('a')) window.location.href = href;
       });
     });
 
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = document.querySelector(anchor.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+    // ── SMOOTH SCROLL ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
       });
     });
 
-    // Intersection observer for fade-in
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
+    // ── FADE IN ON SCROLL ──
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.style.opacity = '1';
+          en.target.style.transform = 'translateY(0)';
         }
       });
-    }, { threshold: 0.1 });
-
+    }, { threshold: 0.08 });
     document.querySelectorAll('.float-card').forEach((el, i) => {
       el.style.opacity = '0';
-      el.style.transform = 'translateY(30px)';
-      el.style.transition = `opacity 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s`;
+      el.style.transform = 'translateY(28px)';
+      el.style.transition = `opacity 0.55s ease ${i * 0.08}s, transform 0.55s ease ${i * 0.08}s`;
       io.observe(el);
     });
   </script>
