@@ -421,7 +421,7 @@
     });
     if (preService) {
       const t = document.querySelector(`[data-service="${preService}"]`);
-      if (t) t.click();
+      if (t) { t.click(); setStep(2); }
     }
 
     // Load admin availability settings
